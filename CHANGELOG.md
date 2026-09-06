@@ -6,6 +6,7 @@ All notable release changes are documented here. Database migrations are forward
 
 ### Fixed
 
+- Plain water bottles can be drunk without Alchemy for hydration plugin compatibility. Other potions, including water bottles with custom potion effects, retain their technology requirements.
 - Treasury withdrawals fail closed while the cache is unavailable and verify current leadership and membership under database locks before debiting funds.
 - Container access flags no longer grant permission to break containers. Wartime container protection remains enforced.
 - Multi-block placements, including beds across chunk boundaries, require permission at every affected block.

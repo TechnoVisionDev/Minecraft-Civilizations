@@ -559,6 +559,8 @@ Cancellation is available during the first **5 minutes** by default and refunds 
 
 In strict mode, receiving locked equipment from another player does not unlock its use. Unaffiliated players have no civilization research. Technology is action-specific: for example, some recipes require two branches together. Powered rails require Mechanical Transport and Redstone Engineering; spectral arrows require Fletching and Nether Expedition; tipped arrows require Fletching and Advanced Alchemy.
 
+Plain water bottles can be drunk without Alchemy, including for hydration plugins. Other drinkable potions and water bottles with custom potion effects still require Alchemy; splash and lingering potions still require Advanced Alchemy.
+
 ### Default research catalog
 
 The table lists all bundled technologies. Costs beyond Knowledge are shown in the in-game tree and [technologies.yml](src/main/resources/technologies.yml). The full default tree costs **1,002 Knowledge**. “Era” groups organize the catalog; the civilization's displayed age follows the milestone rules below.

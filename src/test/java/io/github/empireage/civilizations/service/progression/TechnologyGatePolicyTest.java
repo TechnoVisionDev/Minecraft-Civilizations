@@ -3,6 +3,8 @@ package io.github.empireage.civilizations.service.progression;
 import io.github.empireage.civilizations.domain.TechnologyMode;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.PotionType;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;
@@ -10,8 +12,47 @@ import java.util.Set;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 class TechnologyGatePolicyTest {
+    @Test
+    void plainWaterCanBeDrunkWithoutAlchemy() {
+        ItemStack water = potion(Material.POTION, PotionType.WATER, false);
+        assertTrue(CapabilityPolicy.requirementsForUse(water).isEmpty());
+    }
+
+    @Test
+    void otherDrinkablePotionsStillRequireAlchemy() {
+        for (PotionType type : PotionType.values()) {
+            if (type == PotionType.WATER) continue;
+            assertEquals(Set.of(CapabilityPolicy.USE_DRINKABLE_POTIONS),
+                CapabilityPolicy.requirementsForUse(potion(Material.POTION, type, false)), type.name());
+        }
+        assertEquals(Set.of(CapabilityPolicy.USE_DRINKABLE_POTIONS),
+            CapabilityPolicy.requirementsForUse(potion(Material.POTION, PotionType.WATER, true)));
+        assertEquals(Set.of(CapabilityPolicy.USE_DRINKABLE_POTIONS),
+            CapabilityPolicy.requirementsForUse(potion(Material.POTION, null, false)));
+    }
+
+    @Test
+    void throwableWaterStillRequiresAdvancedAlchemy() {
+        assertEquals(Set.of("USE_SPLASH_POTIONS"),
+            CapabilityPolicy.requirementsForUse(potion(Material.SPLASH_POTION, PotionType.WATER, false)));
+        assertEquals(Set.of("USE_LINGERING_POTIONS"),
+            CapabilityPolicy.requirementsForUse(potion(Material.LINGERING_POTION, PotionType.WATER, false)));
+    }
+
+    private static ItemStack potion(Material material, PotionType type, boolean customEffects) {
+        ItemStack item = mock(ItemStack.class);
+        PotionMeta meta = mock(PotionMeta.class);
+        when(item.getType()).thenReturn(material);
+        when(item.getItemMeta()).thenReturn(meta);
+        when(meta.getBasePotionType()).thenReturn(type);
+        when(meta.hasCustomEffects()).thenReturn(customEffects);
+        return item;
+    }
+
     @Test
     void enforcementModesSeparateProductionFromUse() {
         assertTrue(TechnologyAccess.productionGated(TechnologyMode.STRICT));

@@ -1,0 +1,404 @@
+[CENTER][SIZE=7][B]CIVILIZATIONS[/B][/SIZE]
+[SIZE=4]Found a nation. Build its future. Defend its borders.[/SIZE]
+
+[B]Nations • Land Claims • Private Plots • Research • Religion • Scheduled Wars[/B][/CENTER]
+
+Turn survival into a shared history.
+
+Civilizations brings nation building to Minecraft: players settle connected territory, establish a capital, contribute to a shared stockpile, and research the technologies that shape their community. Citizens can own homes, leaders can fund their government through plot sales and taxes, and neighboring civilizations can fight during scheduled war windows.
+
+Start as a small settlement. Organize farmers, builders, miners, and defenders. Work toward the Iron Age, High Age, and Imperial Age as your civilization unlocks new equipment, industry, travel, and room to grow.
+
+[B]For survival communities, nation roleplay, and servers built around long-term cooperative progression.[/B]
+
+[SIZE=5][B]Requirements at a glance[/B][/SIZE]
+[LIST]
+[*][B]Server target:[/B] Spigot 26.2
+[*][B]Java:[/B] 25
+[*][B]Database:[/B] MySQL 8.x required
+[*][B]Client:[/B] Minecraft Java Edition; no client mod required
+[*][B]Currency features:[/B] Optional; require Vault and a registered economy provider
+[*][B]Deployment:[/B] One active Minecraft server per Civilizations database schema
+[/LIST]
+The current source version is 1.0.0. Compatibility with other server distributions is not established by this project; Folia support is not declared.
+
+[I]Numbers below describe the bundled defaults. In-game menus reflect your server's current settings.[/I]
+
+[SIZE=5][B]Build a civilization together[/B][/SIZE]
+
+Found a named civilization, invite citizens, appoint advisors, and establish a government with clear responsibilities. Leaders direct the nation; advisors help manage membership, territory, and research; citizens contribute resources and develop their own property.
+
+[LIST]
+[*]One leader, advisor roles, invitations, leadership transfer, and civilization chat.
+[*]Activity-based member establishment that contributes to claim capacity.
+[*]Connected chunk territory anchored to a capital.
+[*]Research bonuses for claims, advisor slots, private plots, and research queues.
+[*]A 14-day founding peace shield before normal campaign declarations become available.
+[/LIST]
+New civilizations begin with a base capacity of 8 claims. Established non-leader members add capacity, and research expands it further, up to the default 128-claim cap.
+
+[SIZE=5][B]Give every citizen a place to build[/B][/SIZE]
+
+Organize territory into government land, common areas, and privately owned plots. List public land for citizens to purchase, let owners resell their plots, and manage access with per-plot trust and interaction flags.
+
+[LIST]
+[*][B]Capital and civic land:[/B] Government building areas managed by leaders and advisors.
+[*][B]Common land:[/B] Shared building space for citizens.
+[*][B]Private plots:[/B] Building access for the owner and explicitly trusted citizens.
+[*][B]Property tools:[/B] Listings, resale, labels, greetings, trust, and container/interaction flags.
+[*][B]Protection:[/B] Direct building controls plus checks for containers, fluids, pistons, hoppers, explosions, entities, and other indirect interactions.
+[/LIST]
+Leaders and advisors do not automatically receive building access to another citizen's private plot. Use the local claim map and inspection commands to understand nearby territory and your access.
+
+[SIZE=5][B]Create an economy for your nation[/B][/SIZE]
+
+With Vault and an economy provider, players can sell supported resource bundles, purchase plots, donate to their civilization, and help fund its treasury.
+
+Government plot sales credit the treasury. Private resales pay a default 10% share to the civilization. Leaders can also set a weekly currency tax per privately owned plot; the starting rate is 0.
+
+Weekly taxes are collected automatically from each owner's personal balance, including while offline, and credited to the treasury. Buyers see the weekly tax before confirming a purchase, and a dedicated menu shows due dates and payment status.
+
+[B]If the economy provider confirms insufficient funds, the affected plot immediately returns to civic ownership without a refund.[/B] Its buildings remain, but private ownership and access settings are cleared. Provider failures or uncertain transfers do not count as insufficient funds.
+
+Currency is optional. The default economy mode is DISABLED: money costs are waived, effective plot prices are zero, and selling, treasury transfers, and tax collection are unavailable. Civic resources and Knowledge still drive progression.
+
+[SIZE=5][B]Manufacture resources that matter[/B][/SIZE]
+
+Craft 15 civic resources across five families and three tiers:
+
+[LIST]
+[*][B]Masonry:[/B] Heavy Cobblestone → Reinforced Masonry → Monumental Masonry
+[*][B]Timber:[/B] Bound Timber → Engineered Timber → Great Beams
+[*][B]Metalwork:[/B] Forged Components → Tempered Mechanisms → Imperial Mechanisms
+[*][B]Scholarship:[/B] Research Folio → Bound Archive → Grand Codex
+[*][B]Arcana:[/B] Arcane Matrix → Resonant Matrix → Sovereign Matrix
+[/LIST]
+Browse items and recipes in-game, compress materials into higher tiers, and decompress higher tiers through the refining menu. Tier colors remain consistent across items and menus.
+
+Deposit civic materials into your civilization's permanent shared stockpile to fund claims, work orders, research, and campaign declarations. The stockpile menu shows each resource, exact balances, and recipe details, with a separate transaction history.
+
+[B]Deposits are permanent contributions.[/B] Players cannot withdraw physical items from the stockpile. Refining operates on items still in their inventory.
+
+[SIZE=5][B]Research your way through the ages[/B][/SIZE]
+
+Progress through 26 bundled technologies, from Agriculture and Copperworking to Aeronautics, Netherite Smithing, and Imperial Administration.
+
+Civilization work orders turn stockpile resources into [B]Knowledge[/B]. Basic, Industrial, and Strategic orders provide shared goals, each with a default 24-hour cooldown after completion. Leaders and advisors spend Knowledge and civic materials to start research.
+
+[LIST]
+[*]An interactive technology tree with prerequisites, costs, capabilities, and progress.
+[*]Research unlocks for tools, weapons, armor, farming, transport, industry, enchanting, and brewing.
+[*]Nether and End expeditions, followed by advanced equipment and flight.
+[*]Government improvements that expand civilization capacity.
+[*]Research timers and progress that persist through logouts and restarts.
+[*]One starting research queue, with a second unlocked by Imperial Administration.
+[/LIST]
+Choose the progression rules that suit your server:
+
+[LIST]
+[*][B]STRICT:[/B] Enforce mapped crafting, production, equipment, and use requirements. This is the default.
+[*][B]CRAFT_ONLY:[/B] Keep mapped crafting and production requirements while relaxing ordinary item-use restrictions. Dimension commands still require expedition research.
+[*][B]DISABLED:[/B] Turn off technology enforcement while retaining civilization and research systems.
+[/LIST]
+Research belongs to the civilization. In strict mode, giving someone locked equipment does not grant permission to use it.
+
+[SIZE=5][B]Seek the favor of the Greek gods[/B][/SIZE]
+
+Open the pantheon, choose a god, and offer the stack in your hand for a chance at a temporary blessing.
+
+[LIST]
+[*][B]Zeus:[/B] Gold ingots — Speed I and Jump Boost II.
+[*][B]Poseidon:[/B] Cod — Water Breathing I and Dolphin's Grace I.
+[*][B]Demeter:[/B] Wheat — Regeneration I and Health Boost I.
+[*][B]Ares:[/B] Iron ingots — Strength I and Resistance I.
+[*][B]Athena:[/B] Books — Haste I and Luck I.
+[*][B]Artemis:[/B] Feathers — Speed I and Night Vision I.
+[/LIST]
+Blessings last 30 minutes by default, with a persistent 4-hour cooldown per player, per god. Choosing a god does not permanently bind the player to a religion.
+
+A recorded sacrifice consumes the entire held stack and starts the cooldown whether accepted or rejected. Correct offerings must exceed a random roll from 1 to 32; 33 or more correct items guarantee acceptance under the default rules. Rejected offerings call down lightning instead of granting a blessing.
+
+[SIZE=5][B]Fight wars on a schedule[/B][/SIZE]
+
+Prepare for campaigns between neighboring civilizations with a shared border. Craft a War Charter, contribute the declaration materials, and commit to a known combat window.
+
+[LIST]
+[*]A configurable weekly war window and timezone.
+[*]At least 24 hours' declaration notice by default.
+[*]At least 3 established members on each side by default.
+[*]Founding peace shields, membership locks, and participant rosters.
+[*]Enemy block breaking and container looting during the active window, subject to protection and material rules.
+[*]Restricted siege placement, protected materials, and protection for the capital monument.
+[*]Mutual peace, a declaration cancellation grace period, and a 7-day post-campaign truce.
+[/LIST]
+The default war window is [B]Saturday, 14:00–18:00, America/Los_Angeles[/B]. Check the in-game war status for the actual campaign dates.
+
+Campaigns end when their scheduled window expires or both leaders accept peace. Land and plot ownership remain with their existing owners; wars do not award scores, winners, or automatic territory transfers. Broken buildings and looted items are not restored at the end. Temporary siege placements are tracked for cleanup.
+
+[SIZE=5][B]Help players find their footing[/B][/SIZE]
+
+[LIST]
+[*]A tutorial book automatically delivered to new players, with a replacement command.
+[*]Paginated help, topic shortcuts, and command tab completion.
+[*]Automatic first-join placement on safe, unclaimed Overworld ground.
+[*]/wild for another wilderness destination, with a 12-hour cooldown after a successful manual use.
+[*]Civilization home travel and research-gated /nether and /end commands.
+[*]Safe random dimension destinations inside the target world's border.
+[*]Global, local, and civilization chat; local range defaults to 100 blocks.
+[*]Confirmation menus for costly or destructive gameplay actions.
+[/LIST]
+[B]This plugin changes vanilla survival progression.[/B] Villager and wandering-trader commerce is disabled. Physical Nether/End portals and End gateways are suppressed; players travel with commands. In default strict mode, many vanilla actions require civilization research, including for players who have not joined a civilization.
+
+[SIZE=5][B]Installation[/B][/SIZE]
+
+[LIST=1]
+[*]Prepare a Spigot 26.2 server running Java 25 and a reachable MySQL 8.x database. Use a dedicated schema and database account with the permissions needed for automatic schema migrations.
+[*]Stop the server and place Civilizations-1.0.0.jar in the plugins folder. Install any optional integrations you want to use.
+[*]Start once to generate the Civilizations configuration files, then stop before admitting players. The initial placeholder database credentials may cause connection warnings.
+[*]Edit plugins/Civilizations/config.yml with your database endpoint and credentials. Set the allowed claim worlds and the Overworld, Nether, and End travel world names to match your loaded worlds.
+[*]For currency features, install both Vault and an economy provider, then set economy.mode to VAULT. Otherwise leave it DISABLED.
+[*]Set appropriate world borders and choose your war timezone and weekly window. The plugin does not create or load destination worlds.
+[*]Start the server and wait for the message: “MySQL is ready and the authoritative civilization cache is loaded.” Database migrations apply automatically.
+[*]Run /civ admin migrate and /civ admin invariants, then check founding, protection, menus, and travel with a normal player account before opening the server.
+[/LIST]
+If you build from source, use JDK 25 and Maven, run mvn clean verify, and install target/Civilizations-1.0.0.jar.
+
+[SIZE=5][B]Your first civilization[/B][/SIZE]
+
+[LIST=1]
+[*]Read your tutorial book or run /civ help.
+[*]Use /civ list to find a community to join, or gather founding materials for your own.
+[*]Open /civ items for recipes. Default founding requires 4 Heavy Cobblestone and 2 Bound Timber in your inventory.
+[*]Stand on eligible unclaimed land, run /civ create <name>, and review the confirmation menu.
+[*]Invite friends with /civ invite <player>; they join with /civ accept <civilization>.
+[*]Craft civic materials and contribute with /civ deposit hand or /civ deposit all.
+[*]Open /civ workorders to fund Knowledge, choose research in /civ tech, and claim adjacent chunks with /civ claim.
+[/LIST]
+
+[SIZE=5][B]Commands[/B][/SIZE]
+
+Use /civ help [page|topic] for in-game guidance. Angle brackets mark required values; square brackets mark optional values. Civilization roles and current gameplay restrictions still apply.
+
+[SPOILER="General, membership, and chat"]
+[CODE]
+/civ help [page|topic]              Read the in-game guide
+/civ tutorial                       Receive a tutorial book (24-hour cooldown)
+/civ create <name>                  Found a civilization
+/civ info [civilization]            View civilization details
+/civ list [page]                    Browse civilizations
+/civ members [page]                 View members and roles
+/civ invite <player>                Invite a player
+/civ accept <civilization>          Accept an invitation
+/civ deny <civilization>            Decline an invitation
+/civ kick <player>                  Remove an eligible citizen
+/civ leave                          Leave your civilization
+/civ advisor <add|remove> <player>  Appoint or remove an advisor
+/civ transfer <player>              Transfer leadership
+/civ disband                        Disband with confirmation
+/chat <global|local|civ>             Choose your chat channel
+/civ chat [message]                 Send a civ message or toggle civ chat
+[/CODE]
+Leaders and advisors manage invitations and eligible citizen removals. Advisor appointments, leadership transfer, and disbanding are leader-only actions.
+[/SPOILER]
+
+[SPOILER="Territory, property, and travel"]
+[CODE]
+/civ map [radius]                   View nearby claims
+/civ inspect                        Inspect current chunk access
+/civ claim                          Claim eligible adjacent land
+/civ unclaim                        Release eligible land
+/civ setcapital                     Move the capital (leader only)
+/civ sethome                        Set the civilization home in its capital
+/civ home                           Travel to the civilization home
+/wild                               Travel to safe Overworld wilderness
+/nether                             Travel to safe Nether wilderness
+/end                                Travel to a safe End island
+/civ teleport <overworld|nether|end> Travel between configured worlds
+/civ plot type <civic|common>        Set public land access type
+/civ plot defaultprice <amount>     Set the default government listing price
+/civ plot list [price]              List public land for citizens
+/civ plot unlist                    Withdraw an authorized listing
+/civ plot buy                       Purchase the current listed plot
+/civ plot sell <price>              List your private plot for resale
+/civ plot surrender                 Give up private ownership
+/civ plot trust <player>            Trust a fellow citizen
+/civ plot untrust <player>          Remove trust
+/civ plot label <text|clear>         Set or clear your plot label
+/civ plot greeting <text|clear>      Set or clear your plot greeting
+/civ plot flags                     View access flags
+/civ plot flags <flag> <on|off>      Change an authorized access flag
+[/CODE]
+Flags: public_interact, citizen_interact, public_containers, citizen_containers, redstone. Claims and public land are managed by leaders/advisors; private property actions follow ownership rules. Nether and End travel normally require the corresponding expedition technologies.
+[/SPOILER]
+
+[SPOILER="Resources, research, economy, religion, and war"]
+[CODE]
+/civ items                          Browse civic items and recipes
+/civ refine                         Open inventory refining
+/civ deposit <hand|all>             Contribute civic items permanently
+/civ stockpile                      View shared resources
+/civ stockpile history [page]       View resource history
+/civ workorders                     Open work orders (alias: /civ orders)
+/civ tech                           Open the technology tree
+/civ techtree                       Open the technology tree
+/civ research tree                  Open the technology tree
+/civ research start <technology>    Begin research
+/civ research status                View research queues
+/civ research cancel [queue]        Cancel within the grace period
+/sell <hand|all|list>                Sell bundles or view supported resources
+/civ treasury balance               View treasury funds
+/civ treasury deposit <amount>      Donate personal currency
+/civ treasury withdraw <amount>     Withdraw funds (leader only)
+/civ treasury history [page]        View money movements
+/civ taxes                          View weekly plot taxes
+/civ taxes set <amount>             Set the weekly rate (leader only)
+/religion [god]                     View the pantheon or select a god
+/sacrifice [god]                    Offer your held stack
+/civ war declare <civilization>     Schedule a campaign (leader only)
+/civ war status [civilization]      View the campaign and exact window
+/civ war peace                      Offer or accept peace (leader only)
+/civ war cancel                     Cancel in the attacker's grace period
+[/CODE]
+Research changes and work-order completion require a leader/advisor role. Currency operations require an active Vault economy. God keys: zeus, poseidon, demeter, ares, athena, artemis.
+[/SPOILER]
+
+[SPOILER="Administration"]
+[CODE]
+/civ admin help
+/civ admin reload
+/civ admin inspect civ <name|id>
+/civ admin inspect claim [world-uuid x z]
+/civ admin inspect player <player|uuid>
+/civ admin inspect war <id>
+/civ admin setrole <player> <leader|advisor|citizen>
+/civ admin forceclaim <civilization>
+/civ admin forceunclaim
+/civ admin grantresource <civ> <key> <tier> <signed-amount>
+/civ admin grantknowledge <civ> <signed-amount>
+/civ admin research <unlock|lock> <civ> <technology> [confirm]
+/civ admin war <cancel|resolve> <id> [confirm] [reason]
+/civ admin war setstate <id> <state> [confirm]
+/civ admin audit [filters]
+/civ admin migrate
+/civ admin invariants
+[/CODE]
+All administrator commands require civilizations.admin. Reload, data mutation, and campaign overrides require their corresponding additional permission. High-risk changes require confirmation and are audited.
+
+Audit filters: civ=, actor=, action=, target=TYPE:ID, since=, before=, page=, size=.
+
+/civ admin migrate reports schema and migration status; startup applies migrations automatically. /civ admin invariants checks data consistency without changing it.
+[/SPOILER]
+
+[SIZE=5][B]Permissions[/B][/SIZE]
+
+[SPOILER="Permission reference"]
+[B]Enabled for players by default[/B]
+[CODE]
+civilizations.use                 Basic /civ, /nether, and /end commands
+civilizations.create              Found a civilization
+civilizations.wild                Use /wild
+civilizations.chat                Use chat channels and civilization chat
+civilizations.sell                Use /sell
+civilizations.religion            View gods and make sacrifices
+[/CODE]
+[B]Enabled for operators by default[/B]
+[CODE]
+civilizations.admin               Administrator access and diagnostics
+civilizations.admin.reload        Message reload and configuration validation
+civilizations.admin.data          Data repairs and resource/Knowledge grants
+civilizations.admin.war           Campaign overrides and repairs
+[/CODE]
+[B]Disabled by default, including for ordinary operators[/B]
+[CODE]
+civilizations.bypass.protection   Bypass land protection
+civilizations.bypass.technology   Bypass technology restrictions
+civilizations.bypass.war          Bypass war roster restrictions
+[/CODE]
+Server permission nodes do not replace civilization roles. Grant the base administrator node alongside any additional administrator capability you need.
+[/SPOILER]
+
+[SIZE=5][B]Configuration and integrations[/B][/SIZE]
+
+Generated files live in plugins/Civilizations/:
+
+[LIST]
+[*][B]config.yml:[/B] Storage, worlds, membership, claims, plots, economy, travel, technology enforcement, war rules, and integrations.
+[*][B]resources.yml:[/B] Civic items, recipes, tier conversion, and claim costs.
+[*][B]technologies.yml:[/B] Research prerequisites, costs, durations, capabilities, and bonuses.
+[*][B]workorders.yml:[/B] Order requirements, selection weights, Knowledge rewards, and cooldowns.
+[*][B]religion.yml:[/B] Gods, offerings, effects, blessing duration, and sacrifice cooldowns.
+[*][B]messages.yml:[/B] Shared messages with legacy & color support; some interface text remains in code.
+[/LIST]
+Most balancing is configurable. The 12-hour /wild cooldown and seven-day plot-tax period are fixed in this version. Leaders set their civilization's tax amount in-game. /sell uses a fixed catalog of supported resource bundles.
+
+[B]Restart after gameplay, database, integration, or catalog changes.[/B] /civ admin reload reloads messages and validates config.yml; it does not apply those structural changes. Preserve deployed resource and technology keys, and back up custom catalogs before upgrades.
+
+[B]Optional integrations[/B]
+[LIST]
+[*][B]Vault + economy provider:[/B] Currency costs, sales, paid property, treasuries, and tax collection. Offline plot taxes require provider support for offline withdrawals.
+[*][B]PlaceholderAPI:[/B] Civilization information for compatible scoreboards, chat formats, and other displays.
+[*][B]WorldGuard 7+:[/B] Reject claims that overlap protected regions. Install WorldGuard's own required dependencies as well.
+[*][B]CoreProtect:[/B] Integration status visibility. Investigation and rollback use CoreProtect's own tools; Civilizations does not trigger automatic rollbacks.
+[/LIST]
+
+[SPOILER="PlaceholderAPI placeholders"]
+[CODE]
+%civ_name%
+%civ_role%
+%civ_age%
+%civ_claims%
+%civ_claim_limit%
+%civ_members%
+%civ_research%
+%civ_research_remaining%
+%civ_war_state%
+%civ_war_enemy%
+%civ_war_remaining%
+[/CODE]
+The civ expansion registers when PlaceholderAPI is installed and the integration is enabled.
+[/SPOILER]
+
+[SIZE=5][B]Frequently asked questions[/B][/SIZE]
+
+[B]Can I run it without MySQL?[/B]
+No. MySQL 8.x is required, including when currency features are disabled. This version has no SQLite or flat-file storage mode.
+
+[B]Do players need a mod?[/B]
+No. Players connect with Minecraft Java Edition; the plugin runs on the server.
+
+[B]Do I need Vault?[/B]
+Only for currency features. Vault also needs a registered economy provider; Vault alone does not manage player balances.
+
+[B]Can citizens build without running the government?[/B]
+Yes. Citizens can build on common land and their authorized private plots, contribute civic materials, and benefit from their civilization's research. Government decisions remain with the leader and advisors.
+
+[B]Can I withdraw deposited civic items?[/B]
+No. Deposits become permanent shared balances used for civilization expenses. Refine physical items before depositing when you need a different tier.
+
+[B]Can another civilization take our land in war?[/B]
+War does not transfer claims or private ownership. Eligible opponents can break permitted blocks and loot containers during the active window, so buildings and stored items can still be lost.
+
+[B]Does the plugin restore war damage?[/B]
+It tracks temporary siege placements for cleanup. It does not restore broken buildings or looted items, and it does not automatically invoke CoreProtect.
+
+[B]What happens if a plot owner cannot pay tax?[/B]
+Confirmed insufficient funds immediately returns that plot to civic ownership without a refund. Buildings remain. There is no tax debt or grace period; economy errors and uncertain transfers preserve ownership pending recovery or review.
+
+[B]What happens if the database disconnects?[/B]
+State-changing operations are locked when storage is unavailable. Territory protection treats unknown land as protected while authoritative data is unavailable, and the plugin retries its database connection.
+
+[B]Can several servers share one database?[/B]
+Use one active server process per schema. The server-id setting identifies audit records; it does not provide cross-server synchronization.
+
+[B]Does this include alliances or automatic leadership succession?[/B]
+This version does not implement alliances, federations, automatic succession, territory decay, or general civilization upkeep. Weekly private-plot taxes are a separate implemented feature.
+
+[SIZE=5][B]Documentation and issue reports[/B][/SIZE]
+
+The project README contains the player wiki, full defaults, and hosting guide. The operations guide at docs/OPERATIONS.md covers backups, upgrades, diagnostics, and recovery. CHANGELOG.md records version changes.
+
+When reporting a problem, include the Civilizations version, server distribution and version, Java version, relevant integrations, steps to reproduce, expected behavior, and the relevant console error. Remove passwords and database credentials before sharing configuration or logs.
+
+Back up the database, plugin data folder, and Minecraft player data together before upgrades. Database migrations are forward-only; keep the matching plugin JAR with your backup.
+
+[CENTER][B]Gather your people. Establish your capital. Give your civilization a future.[/B][/CENTER]

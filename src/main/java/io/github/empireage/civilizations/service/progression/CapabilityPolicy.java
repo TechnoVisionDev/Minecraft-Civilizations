@@ -3,6 +3,8 @@ package io.github.empireage.civilizations.service.progression;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.PotionType;
 
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
@@ -37,6 +39,10 @@ public final class CapabilityPolicy {
     public static Set<String> requirementsForUse(ItemStack item) {
         if (item == null || item.getType() == Material.AIR) return Set.of();
         LinkedHashSet<String> requirements = new LinkedHashSet<>(USE.getOrDefault(item.getType(), Set.of()));
+        if (item.getType() == Material.POTION && item.getItemMeta() instanceof PotionMeta potion
+            && potion.getBasePotionType() == PotionType.WATER && !potion.hasCustomEffects()) {
+            requirements.remove(USE_DRINKABLE_POTIONS);
+        }
         if (!item.getEnchantments().isEmpty()) requirements.add(EQUIP_ENCHANTED_ITEMS);
         return Set.copyOf(requirements);
     }
