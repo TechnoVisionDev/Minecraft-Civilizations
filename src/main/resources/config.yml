@@ -1,0 +1,151 @@
+server-id: "primary"
+
+database:
+  host: "127.0.0.1"
+  port: 3306
+  database: "civilizations"
+  username: "civilizations"
+  password: "change-me"
+  ssl: false
+  pool-size: 10
+  connection-timeout-ms: 5000
+  retry-seconds: 30
+
+worlds:
+  # Only explicitly listed worlds permit founding or new claims. Add names deliberately.
+  allowed: ["world"]
+  blacklisted-biomes: []
+  # Required safety invariant: unknown territory is never treated as wilderness.
+  fail-closed-during-warmup: true
+
+chat:
+  # Local chat is limited to players in the same world within this many blocks.
+  local-radius-blocks: 100
+
+founding:
+  minimum-distance-chunks: 12
+  peace-shield-days: 14
+  money-cost: 0.00
+  material-cost:
+    masonry:1: 4
+    timber:1: 2
+
+membership:
+  invite-expiry-minutes: 10
+  change-cooldown-hours: 24
+  established-after-hours: 72
+  established-active-minutes: 120
+  established-window-days: 14
+  advisor-base-limit: 3
+  inactivity-succession-enabled: false
+  inactivity-days: 30
+  succession-notice-hours: 72
+
+claims:
+  base-capacity: 8
+  established-member-bonus: 2
+  absolute-cap: 128
+  refund-percent: 50
+  capital-move-cooldown-days: 7
+  capital-move-cost:
+    masonry:2: 2
+    timber:2: 1
+
+plots:
+  base-limit: 4
+  default-price: 100.00
+  sale-tax-percent: 10
+  confirmation-seconds: 30
+  home-enabled: true
+  home-warmup-seconds: 5
+  home-cooldown-seconds: 60
+
+economy:
+  mode: "DISABLED" # DISABLED or VAULT
+
+technology:
+  enforcement: "STRICT" # STRICT, CRAFT_ONLY, DISABLED
+  cancellation-grace-minutes: 5
+
+# Physical Nether/End portals and End gateways are disabled. These destinations
+# select worlds for /civ teleport <overworld|nether|end>, /nether, and /end.
+# Overworld returns use x/y/z, or spawn if omitted; safe-search-radius applies there.
+# Nether/End entries ignore x/y/z and find safe random ground within their live borders.
+# Dimension commands share this warmup/cooldown; /wild has its separate 12-hour cooldown.
+# /wild and first-join placement use destinations.overworld.world and its current world border.
+travel:
+  warmup-seconds: 5
+  cooldown-seconds: 60
+  safe-search-radius: 8
+  # Normal founding and claims are rejected within this many chunks of each configured
+  # spawn/coordinate anchor (including legacy Nether/End public arrival reservations).
+  claim-protection-radius-chunks: 1
+  destinations:
+    overworld:
+      world: "world"
+    nether:
+      world: "world_nether"
+    end:
+      world: "world_the_end"
+
+war:
+  timezone: "America/Los_Angeles"
+  weekday: "SATURDAY"
+  start-time: "14:00"
+  end-time: "18:00"
+  notice-hours: 24
+  truce-days: 7
+  declaration-grace-minutes: 10
+  minimum-established-members: 3
+  capital-monument-radius: 3
+  capital-monument-height: 8
+  allow-capital-combat: true
+  # Participants can collect drops from blocks broken during the war window.
+  attacker-block-drops: true
+  declaration-cost:
+    masonry:2: 4
+    timber:2: 4
+    metalwork:2: 2
+  siege-place-materials: [LADDER, SCAFFOLDING, DIRT, COBBLESTONE, TNT]
+  tnt-breakable-materials:
+    - STONE
+    - COBBLESTONE
+    - MOSSY_COBBLESTONE
+    - ANDESITE
+    - DIORITE
+    - GRANITE
+    - DEEPSLATE
+    - COBBLED_DEEPSLATE
+    - DIRT
+    - COARSE_DIRT
+    - GRASS_BLOCK
+    - SAND
+    - GRAVEL
+    - NETHERRACK
+    - OAK_PLANKS
+    - SPRUCE_PLANKS
+    - BIRCH_PLANKS
+    - JUNGLE_PLANKS
+    - ACACIA_PLANKS
+    - DARK_OAK_PLANKS
+    - MANGROVE_PLANKS
+    - CHERRY_PLANKS
+    - BAMBOO_PLANKS
+  always-protected-materials: [BEDROCK, END_PORTAL, END_PORTAL_FRAME, NETHER_PORTAL, SPAWNER, ENDER_CHEST, COMMAND_BLOCK, CHAIN_COMMAND_BLOCK, REPEATING_COMMAND_BLOCK, BARRIER]
+
+protection:
+  friendly-fire-own-claims: false
+  friendly-fire-wilderness: true
+  protect-animals: true
+  block-mob-griefing: true
+
+integrations:
+  worldguard: true
+  placeholderapi: true
+  coreprotect: true
+
+notifications:
+  claim-entry-seconds: 3
+  research-check-seconds: 30
+  war-tick-seconds: 1
+  invariant-check-minutes: 30

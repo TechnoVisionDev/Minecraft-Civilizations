@@ -1,0 +1,249 @@
+catalog-version: 3
+
+era-thresholds:
+  iron-age: [ironworking, civic_planning]
+  high-age:
+    required: diamondworking
+    any-two: [enchanting, alchemy, administration_iii, advanced_alchemy]
+  imperial-age: [imperial_administration]
+
+# Knowledge totals exactly 1,002 across the complete tree. Capability keys are
+# deliberately action-specific; combination recipes require every listed key.
+technologies:
+  agriculture:
+    name: "Agriculture"
+    era: SETTLEMENT
+    prerequisites: []
+    knowledge: 9
+    duration: 3h
+    costs: {"masonry:1": 2, "timber:1": 2, "scholarship:1": 1}
+    capabilities: [CRAFT_SMOKER, PLACE_SMOKER, USE_SMOKER, CRAFT_COMPOSTER, PLACE_COMPOSTER, USE_COMPOSTER, USE_BONE_MEAL_ON_CROPS]
+    modifiers: {}
+  animal_husbandry:
+    name: "Animal Husbandry"
+    era: SETTLEMENT
+    prerequisites: [agriculture]
+    knowledge: 10
+    duration: 3h
+    costs: {"timber:1": 3, "scholarship:1": 1}
+    capabilities: [BREED_LIVESTOCK, USE_LEADS_ON_LIVESTOCK]
+    modifiers: {}
+  seafaring:
+    name: "Seafaring"
+    era: SETTLEMENT
+    prerequisites: []
+    knowledge: 10
+    duration: 3h
+    costs: {"timber:1": 4, "scholarship:1": 1}
+    capabilities: [CRAFT_BOATS, USE_BOATS, CRAFT_CHEST_BOATS, USE_CHEST_BOATS, CRAFT_FISHING_RODS, USE_FISHING_RODS]
+    modifiers: {}
+  copperworking:
+    name: "Copperworking"
+    era: SETTLEMENT
+    prerequisites: []
+    knowledge: 10
+    duration: 3h
+    costs: {"masonry:1": 2, "metalwork:1": 2, "scholarship:1": 1}
+    capabilities: [CRAFT_COPPER_TOOLS, USE_COPPER_TOOLS, CRAFT_COPPER_WEAPONS, USE_COPPER_WEAPONS, CRAFT_COPPER_ARMOR, EQUIP_COPPER_ARMOR]
+    modifiers: {}
+  archery:
+    name: "Archery"
+    era: SETTLEMENT
+    prerequisites: []
+    knowledge: 12
+    duration: 4h
+    costs: {"timber:1": 3, "metalwork:1": 1, "scholarship:1": 1}
+    capabilities: [CRAFT_BOWS, USE_BOWS, CRAFT_NORMAL_ARROWS, USE_NORMAL_ARROWS, CRAFT_TARGET_BLOCKS]
+    modifiers: {}
+  civic_planning:
+    name: "Civic Planning"
+    era: SETTLEMENT
+    prerequisites: []
+    knowledge: 13
+    duration: 4h
+    costs: {"masonry:1": 8, "timber:1": 4, "scholarship:1": 2}
+    capabilities: [EXPAND_CLAIMS_I]
+    modifiers: {claim-capacity: 8}
+  horseback_riding:
+    name: "Horseback Riding"
+    era: SETTLEMENT
+    prerequisites: []
+    knowledge: 14
+    duration: 4h
+    costs: {"timber:1": 3, "metalwork:1": 1, "scholarship:1": 2}
+    capabilities: [TAME_HORSES, TAME_DONKEYS, RIDE_EQUINES, EQUIP_EQUINES, BREED_EQUINES]
+    modifiers: {}
+  ironworking:
+    name: "Ironworking"
+    era: SETTLEMENT
+    prerequisites: [copperworking]
+    knowledge: 15
+    duration: 4h
+    costs: {"masonry:1": 6, "timber:1": 3, "metalwork:1": 5, "scholarship:1": 2}
+    capabilities: [CRAFT_IRON_TOOLS, USE_IRON_TOOLS, CRAFT_IRON_WEAPONS, USE_IRON_WEAPONS, CRAFT_IRON_ARMOR, EQUIP_IRON_ARMOR, CRAFT_SHIELDS, USE_SHIELDS, CRAFT_BUCKETS, USE_BUCKETS, CRAFT_SHEARS, USE_SHEARS, CRAFT_FLINT_AND_STEEL, USE_FLINT_AND_STEEL]
+    modifiers: {}
+  scholarship:
+    name: "Scholarship"
+    era: SETTLEMENT
+    prerequisites: []
+    knowledge: 15
+    duration: 6h
+    costs: {"timber:1": 6, "scholarship:1": 8, "arcana:1": 2}
+    capabilities: [SCHOLARLY_RESEARCH]
+    modifiers: {research-speed-percent: 10}
+
+  navigation:
+    name: "Navigation"
+    era: IRON_AGE
+    prerequisites: [seafaring, scholarship]
+    knowledge: 23
+    duration: 7h
+    costs: {"timber:1": 4, "metalwork:1": 4, "scholarship:1": 4}
+    capabilities: [CRAFT_NAVIGATION_ITEMS, USE_NAVIGATION_ITEMS, CRAFT_CARTOGRAPHY_TABLE, USE_CARTOGRAPHY_TABLE]
+    modifiers: {}
+  fletching:
+    name: "Fletching"
+    era: IRON_AGE
+    prerequisites: [archery, ironworking]
+    knowledge: 23
+    duration: 7h
+    costs: {"timber:1": 4, "metalwork:1": 4, "scholarship:1": 3}
+    capabilities: [CRAFT_CROSSBOWS, USE_CROSSBOWS, FLETCHING_MASTERY]
+    modifiers: {}
+  mechanical_transport:
+    name: "Mechanical Transport"
+    era: IRON_AGE
+    prerequisites: [engineering]
+    knowledge: 25
+    duration: 8h
+    costs: {"timber:2": 2, "metalwork:1": 6, "scholarship:1": 3}
+    capabilities: [CRAFT_ADVANCED_MINECARTS, USE_ADVANCED_MINECARTS, CRAFT_DETECTOR_RAILS, USE_DETECTOR_RAILS, CRAFT_ACTIVATOR_RAILS, USE_ACTIVATOR_RAILS, MECHANICAL_TRANSPORT]
+    modifiers: {}
+  engineering:
+    name: "Engineering"
+    era: IRON_AGE
+    prerequisites: [ironworking]
+    knowledge: 28
+    duration: 8h
+    costs: {"masonry:2": 4, "metalwork:1": 8, "scholarship:1": 4}
+    capabilities: [CRAFT_ANVILS, USE_ANVILS, CRAFT_BLAST_FURNACES, USE_BLAST_FURNACES, CRAFT_HOPPERS, USE_HOPPERS, CRAFT_PISTONS, USE_PISTONS, CRAFT_BASIC_MINECARTS, USE_BASIC_MINECARTS, CRAFT_NORMAL_RAILS, USE_NORMAL_RAILS]
+    modifiers: {}
+  fortification:
+    name: "Fortification"
+    era: IRON_AGE
+    prerequisites: [civic_planning, engineering]
+    knowledge: 30
+    duration: 10h
+    costs: {"masonry:2": 8, "timber:2": 4, "metalwork:1": 4}
+    capabilities: [EXPAND_CLAIMS_II, ADVANCED_BORDER_WARNINGS]
+    modifiers: {claim-capacity: 12}
+  administration_ii:
+    name: "Administration II"
+    era: IRON_AGE
+    prerequisites: [civic_planning]
+    knowledge: 31
+    duration: 10h
+    costs: {"masonry:2": 4, "timber:2": 4, "scholarship:2": 4}
+    capabilities: [EXPAND_CLAIMS_III, EXPAND_PRIVATE_PLOTS_I, EXPAND_ADVISORS_I]
+    modifiers: {claim-capacity: 8, plot-capacity: 1, advisor-capacity: 2}
+  redstone_engineering:
+    name: "Redstone Engineering"
+    era: IRON_AGE
+    prerequisites: [engineering, scholarship]
+    knowledge: 35
+    duration: 12h
+    costs: {"metalwork:2": 3, "arcana:1": 8, "scholarship:2": 3}
+    capabilities: [CRAFT_ADVANCED_REDSTONE, USE_ADVANCED_REDSTONE, CRAFT_TNT, USE_TNT, REDSTONE_ENGINEERING]
+    modifiers: {}
+  nether_expedition:
+    name: "Nether Expedition"
+    era: IRON_AGE
+    prerequisites: [ironworking, scholarship]
+    knowledge: 35
+    duration: 12h
+    costs: {"masonry:2": 4, "metalwork:2": 2, "arcana:1": 6}
+    capabilities: [TELEPORT_NETHER, NETHER_PROGRESSION]
+    modifiers: {}
+
+  diamondworking:
+    name: "Diamondworking"
+    era: HIGH_AGE
+    prerequisites: [engineering, scholarship]
+    knowledge: 55
+    duration: 18h
+    costs: {"metalwork:2": 6, "scholarship:2": 5, "arcana:2": 2}
+    capabilities: [CRAFT_DIAMOND_TOOLS, USE_DIAMOND_TOOLS, CRAFT_DIAMOND_WEAPONS, USE_DIAMOND_WEAPONS, CRAFT_DIAMOND_ARMOR, EQUIP_DIAMOND_ARMOR]
+    modifiers: {}
+  enchanting:
+    name: "Enchanting"
+    era: HIGH_AGE
+    prerequisites: [diamondworking, scholarship]
+    knowledge: 53
+    duration: 16h
+    costs: {"scholarship:2": 6, "arcana:2": 6, "timber:2": 2}
+    capabilities: [CRAFT_ENCHANTING_TABLES, USE_ENCHANTING_TABLES, ENCHANT_ITEMS, USE_GRINDSTONES_FOR_ENCHANTMENTS, EQUIP_ENCHANTED_ITEMS]
+    modifiers: {}
+  alchemy:
+    name: "Alchemy"
+    era: HIGH_AGE
+    prerequisites: [nether_expedition, scholarship]
+    knowledge: 53
+    duration: 16h
+    costs: {"scholarship:2": 5, "arcana:2": 7, "metalwork:2": 2}
+    capabilities: [USE_BREWING_STANDS, BREW_DRINKABLE_POTIONS, USE_DRINKABLE_POTIONS]
+    modifiers: {}
+  administration_iii:
+    name: "Administration III"
+    era: HIGH_AGE
+    prerequisites: [administration_ii, fortification]
+    knowledge: 60
+    duration: 18h
+    costs: {"masonry:3": 3, "timber:2": 8, "scholarship:2": 5}
+    capabilities: [EXPAND_CLAIMS_IV, EXPAND_PRIVATE_PLOTS_II]
+    modifiers: {claim-capacity: 20, plot-capacity: 2}
+  advanced_alchemy:
+    name: "Advanced Alchemy"
+    era: HIGH_AGE
+    prerequisites: [alchemy, scholarship]
+    knowledge: 65
+    duration: 20h
+    costs: {"scholarship:2": 6, "arcana:2": 8, "metalwork:2": 3}
+    capabilities: [CRAFT_SPLASH_POTIONS, USE_SPLASH_POTIONS, CRAFT_LINGERING_POTIONS, USE_LINGERING_POTIONS, ADVANCED_ALCHEMY]
+    modifiers: {}
+
+  end_expedition:
+    name: "End Expedition"
+    era: IMPERIAL
+    prerequisites: [diamondworking, enchanting]
+    knowledge: 88
+    duration: 24h
+    costs: {"masonry:3": 3, "arcana:2": 8, "scholarship:3": 3}
+    capabilities: [TELEPORT_END, END_PROGRESSION]
+    modifiers: {}
+  aeronautics:
+    name: "Aeronautics"
+    era: IMPERIAL
+    prerequisites: [end_expedition, engineering]
+    knowledge: 90
+    duration: 24h
+    costs: {"timber:3": 3, "metalwork:3": 3, "arcana:2": 8}
+    capabilities: [EQUIP_ELYTRA, GLIDE_WITH_ELYTRA, BOOST_ELYTRA_WITH_FIREWORKS]
+    modifiers: {}
+  netherite_smithing:
+    name: "Netherite Smithing"
+    era: IMPERIAL
+    prerequisites: [diamondworking, nether_expedition]
+    knowledge: 95
+    duration: 30h
+    costs: {"metalwork:3": 5, "arcana:3": 2, "scholarship:3": 3}
+    capabilities: [CRAFT_NETHERITE_TOOLS, USE_NETHERITE_TOOLS, CRAFT_NETHERITE_WEAPONS, USE_NETHERITE_WEAPONS, CRAFT_NETHERITE_ARMOR, EQUIP_NETHERITE_ARMOR, USE_NETHERITE_SMITHING]
+    modifiers: {}
+  imperial_administration:
+    name: "Imperial Administration"
+    era: IMPERIAL
+    prerequisites: [administration_iii, fortification]
+    knowledge: 105
+    duration: 36h
+    costs: {"masonry:3": 8, "timber:3": 4, "metalwork:3": 4, "scholarship:3": 3}
+    capabilities: [EXPAND_CLAIMS_V, EXPAND_PRIVATE_PLOTS_IIII, EXPAND_RESEARCH_QUEUES_II]
+    modifiers: {claim-capacity: 32, plot-capacity: 3, research-queues: 1}

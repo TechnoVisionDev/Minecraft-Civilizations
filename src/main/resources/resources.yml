@@ -1,0 +1,57 @@
+catalog-version: 2
+recipe-version: 1
+creative-deposits: false
+higher-tier-ratio: 9
+
+# Item names use consistent tier colors at runtime: 1 green, 2 cyan, 3 purple.
+families:
+  masonry:
+    tiers:
+      1: {material: COBBLESTONE, name: "&aHeavy Cobblestone", model-data: 0}
+      2: {material: STONE_BRICKS, name: "&bReinforced Masonry", model-data: 0}
+      3: {material: CHISELED_STONE_BRICKS, name: "&dMonumental Masonry", model-data: 0}
+    base-recipe:
+      type: SHAPELESS
+      ingredients: {COBBLESTONE: 9}
+  timber:
+    tiers:
+      1: {material: OAK_LOG, name: "&aBound Timber", model-data: 0}
+      2: {material: STRIPPED_OAK_LOG, name: "&bEngineered Timber", model-data: 0}
+      3: {material: OAK_WOOD, name: "&dGreat Beams", model-data: 0}
+    accepted-logs: [OAK_LOG, SPRUCE_LOG, BIRCH_LOG, JUNGLE_LOG, ACACIA_LOG, DARK_OAK_LOG, MANGROVE_LOG, CHERRY_LOG, PALE_OAK_LOG]
+  metalwork:
+    tiers:
+      1: {material: IRON_NUGGET, name: "&aForged Components", model-data: 0}
+      2: {material: IRON_INGOT, name: "&bTempered Mechanisms", model-data: 0}
+      3: {material: HEAVY_CORE, name: "&dImperial Mechanisms", model-data: 0}
+    base-recipe:
+      type: SHAPELESS
+      ingredients: {IRON_INGOT: 8, CHARCOAL: 1}
+  scholarship:
+    tiers:
+      1: {material: PAPER, name: "&aResearch Folio", model-data: 0}
+      2: {material: BOOK, name: "&bBound Archive", model-data: 0}
+      3: {material: WRITABLE_BOOK, name: "&dGrand Codex", model-data: 0}
+    base-recipe:
+      type: SHAPELESS
+      ingredients: {PAPER: 8, INK_SAC: 1}
+  arcana:
+    tiers:
+      1: {material: AMETHYST_SHARD, name: "&aArcane Matrix", model-data: 0}
+      2: {material: ECHO_SHARD, name: "&bResonant Matrix", model-data: 0}
+      3: {material: NETHER_STAR, name: "&dSovereign Matrix", model-data: 0}
+    base-recipe:
+      type: SHAPELESS
+      ingredients: {LAPIS_LAZULI: 4, REDSTONE: 4, AMETHYST_SHARD: 1}
+
+claim-cost-bands:
+  - max-claims: 8
+    costs: {"masonry:1": 2, "timber:1": 1}
+  - max-claims: 24
+    costs: {"masonry:2": 1, "timber:1": 2}
+  - max-claims: 48
+    costs: {"masonry:2": 2, "timber:2": 1, "metalwork:1": 1}
+  - max-claims: 96
+    costs: {"masonry:3": 1, "timber:2": 1, "metalwork:2": 1}
+  - max-claims: 128
+    costs: {"masonry:3": 2, "timber:3": 1, "metalwork:2": 2}

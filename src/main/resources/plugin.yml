@@ -1,0 +1,80 @@
+name: Civilizations
+version: '${project.version}'
+main: io.github.empireage.civilizations.CivilizationsPlugin
+api-version: '26.2'
+author: EmpireAge
+description: Persistent civilizations, territory, technology, religion, property, treasury, and scheduled border wars.
+softdepend: [Vault, PlaceholderAPI, CoreProtect, WorldGuard]
+commands:
+  nether:
+    description: Teleport to safe random wilderness below the Nether roof (requires Nether Expedition)
+    usage: /nether
+    permission: civilizations.use
+  end:
+    description: Teleport to a safe random End island (requires End Expedition)
+    usage: /end
+    permission: civilizations.use
+  wild:
+    description: Teleport to safe Overworld wilderness inside the world border (12-hour cooldown)
+    usage: /wild
+    permission: civilizations.wild
+  chat:
+    description: Switch between global, local, and civilization chat
+    usage: /chat <global|local|civ>
+    permission: civilizations.chat
+  civ:
+    description: Civilizations command tree
+    usage: /civ help
+    permission: civilizations.use
+  sell:
+    description: Sell resource bundles for Vault currency
+    usage: /sell <hand|all|list>
+    permission: civilizations.sell
+  religion:
+    description: View the Greek pantheon and choose a god
+    usage: /religion [god]
+    permission: civilizations.religion
+  sacrifice:
+    description: Sacrifice the held stack to a Greek god
+    usage: /sacrifice [god]
+    permission: civilizations.religion
+permissions:
+  civilizations.wild:
+    description: Random Overworld wilderness teleport every 12 hours
+    default: true
+  civilizations.use:
+    description: Use basic Civilizations commands
+    default: true
+  civilizations.create:
+    description: Found a civilization
+    default: true
+  civilizations.chat:
+    description: Switch chat channels and use civilization chat
+    default: true
+  civilizations.sell:
+    description: Sell configured resource bundles for Vault currency
+    default: true
+  civilizations.religion:
+    description: View the pantheon and make sacrifices
+    default: true
+  civilizations.admin:
+    description: Use read-only administration and diagnostics
+    default: op
+  civilizations.admin.reload:
+    description: Reload safe configuration sections
+    default: op
+  civilizations.admin.data:
+    description: Repair civilization data and grant balances
+    default: op
+  civilizations.admin.war:
+    description: Override and repair campaigns
+    default: op
+  civilizations.bypass.protection:
+    description: Explicitly bypass land protection
+    default: false
+  civilizations.bypass.technology:
+    description: Explicitly bypass technology restrictions
+    default: false
+  civilizations.bypass.war:
+    description: Explicitly bypass war roster restrictions
+    default: false

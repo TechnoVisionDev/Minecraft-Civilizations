@@ -1,0 +1,7 @@
+package io.github.empireage.civilizations.database;
+
+public class DatabaseException extends RuntimeException {
+    public DatabaseException(String message, Throwable cause) {
+        super(message, cause);
+    }
+}

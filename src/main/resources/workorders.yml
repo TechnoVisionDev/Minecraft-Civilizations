@@ -1,0 +1,132 @@
+catalog-version: 3
+cooldown: 24h
+
+# One persistent civilization-wide order is maintained for each category. Every
+# order consumes the shared civic stockpile when a leader or advisor completes it.
+templates:
+  basic_heavy_cobblestone:
+    name: "Heavy Cobblestone Supply"
+    category: BASIC
+    civic-resource: "masonry:1"
+    target: 32
+    reward: 2
+    weight: 10
+  basic_bound_timber:
+    name: "Bound Timber Supply"
+    category: BASIC
+    civic-resource: "timber:1"
+    target: 24
+    reward: 2
+    weight: 10
+  basic_forged_components:
+    name: "Forged Components Supply"
+    category: BASIC
+    civic-resource: "metalwork:1"
+    target: 12
+    reward: 2
+    weight: 8
+  basic_research_folios:
+    name: "Research Folio Supply"
+    category: BASIC
+    civic-resource: "scholarship:1"
+    target: 12
+    reward: 2
+    weight: 8
+  basic_arcane_matrices:
+    name: "Arcane Matrix Supply"
+    category: BASIC
+    civic-resource: "arcana:1"
+    target: 8
+    reward: 2
+    weight: 6
+
+  industrial_reinforced_masonry:
+    name: "Reinforced Masonry Supply"
+    category: INDUSTRIAL
+    civic-resource: "masonry:2"
+    target: 5
+    reward: 3
+    weight: 10
+  industrial_engineered_timber:
+    name: "Engineered Timber Supply"
+    category: INDUSTRIAL
+    civic-resource: "timber:2"
+    target: 4
+    reward: 3
+    weight: 10
+  industrial_tempered_mechanisms:
+    name: "Tempered Mechanisms Supply"
+    category: INDUSTRIAL
+    civic-resource: "metalwork:2"
+    target: 4
+    reward: 3
+    weight: 8
+    requires-technologies: [ironworking]
+  industrial_bound_archives:
+    name: "Bound Archive Supply"
+    category: INDUSTRIAL
+    civic-resource: "scholarship:2"
+    target: 4
+    reward: 3
+    weight: 7
+    requires-technologies: [scholarship]
+  industrial_masonry_reserve:
+    name: "Masonry Reserve"
+    category: INDUSTRIAL
+    civic-resource: "masonry:1"
+    target: 64
+    reward: 3
+    weight: 6
+  industrial_timber_reserve:
+    name: "Timber Reserve"
+    category: INDUSTRIAL
+    civic-resource: "timber:1"
+    target: 48
+    reward: 3
+    weight: 6
+
+  strategic_monumental_masonry:
+    name: "Monumental Masonry Supply"
+    category: STRATEGIC
+    civic-resource: "masonry:3"
+    target: 1
+    reward: 4
+    weight: 10
+  strategic_great_beams:
+    name: "Great Beams Supply"
+    category: STRATEGIC
+    civic-resource: "timber:3"
+    target: 1
+    reward: 4
+    weight: 10
+  strategic_imperial_mechanisms:
+    name: "Imperial Mechanisms Supply"
+    category: STRATEGIC
+    civic-resource: "metalwork:3"
+    target: 1
+    reward: 4
+    weight: 7
+    requires-technologies: [engineering]
+  strategic_grand_codex:
+    name: "Grand Codex Supply"
+    category: STRATEGIC
+    civic-resource: "scholarship:3"
+    target: 1
+    reward: 4
+    weight: 7
+    requires-technologies: [scholarship]
+  strategic_resonant_matrices:
+    name: "Resonant Matrix Supply"
+    category: STRATEGIC
+    civic-resource: "arcana:2"
+    target: 4
+    reward: 4
+    weight: 8
+  strategic_sovereign_matrix:
+    name: "Sovereign Matrix Supply"
+    category: STRATEGIC
+    civic-resource: "arcana:3"
+    target: 1
+    reward: 5
+    weight: 5
+    requires-technologies: [nether_expedition]
