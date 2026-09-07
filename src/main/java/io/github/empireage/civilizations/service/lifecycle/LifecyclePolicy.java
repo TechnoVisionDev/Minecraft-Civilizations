@@ -1,6 +1,8 @@
 package io.github.empireage.civilizations.service.lifecycle;
 
 import io.github.empireage.civilizations.domain.OperationResult;
+import io.github.empireage.civilizations.domain.Role;
+import io.github.empireage.civilizations.util.TimeUtil;
 import io.github.empireage.civilizations.util.NameNormalizer;
 
 import java.math.BigDecimal;
@@ -14,6 +16,7 @@ import java.util.Objects;
 /** Pure lifecycle rules shared by command prevalidation and transactional checks. */
 public final class LifecyclePolicy {
     private static final int MAX_CLOCK_SKEW_SECONDS = 300;
+    public static final Duration LEADERSHIP_INACTIVITY = Duration.ofDays(7);
 
     private LifecyclePolicy() {}
 
@@ -70,6 +73,21 @@ public final class LifecyclePolicy {
         return currentAdvisors < advisorLimit
             ? OperationResult.ok("An advisor slot is available.")
             : OperationResult.denied("The civilization has reached its advisor limit of " + advisorLimit + ".");
+    }
+
+    public static OperationResult validateLeadershipClaim(Role claimantRole, int advisorCount,
+                                                           boolean leaderOnline, Instant lastSeen, Instant now) {
+        if (claimantRole == null) return OperationResult.denied("You must belong to this civilization.");
+        if (claimantRole == Role.LEADER) return OperationResult.denied("You are already the leader.");
+        if (claimantRole != Role.ADVISOR && advisorCount > 0)
+            return OperationResult.denied("Only advisors may claim leadership while this civilization has advisors, even if they are offline.");
+        if (leaderOnline) return OperationResult.denied("The civilization leader is online.");
+        if (lastSeen == null) return OperationResult.denied("The leader's last activity cannot be verified.");
+        Instant eligibleAt = lastSeen.plus(LEADERSHIP_INACTIVITY);
+        if (now.isBefore(eligibleAt)) return OperationResult.denied(
+            "The leader must be offline for 7 full days. Leadership can be claimed "
+                + TimeUtil.relative(eligibleAt, now) + " if they remain offline.");
+        return OperationResult.ok("You may claim leadership.");
     }
 
     public static boolean established(Instant joinedAt, Instant lastActiveAt, long activeWindowSeconds, Instant now,

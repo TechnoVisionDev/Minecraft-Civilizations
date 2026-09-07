@@ -50,6 +50,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 
 /**
@@ -66,6 +67,8 @@ public final class CivilizationLifecycleService {
     private final Settings settings;
     private final TechnologyCatalog technologies;
     private final Clock clock;
+    // Main-thread login/logout observations close the gap before asynchronous activity saves.
+    private final Map<UUID, Presence> presence = new ConcurrentHashMap<>();
 
     public CivilizationLifecycleService(Database database, StateCache stateCache, CivilizationLocks locks,
                                          Settings settings, TechnologyCatalog technologies) {
@@ -634,6 +637,62 @@ public final class CivilizationLifecycleService {
             recipientId.toString(), Map.of("newLeaderName", recipient.lastKnownName(), "formerLeaderRole", formerLeaderRole.name()),
             settings.serverId());
         return changed(OperationResult.ok("Leadership transferred to " + recipient.lastKnownName() + "."));
+    }
+
+    public void recordPresence(UUID playerId, boolean online, Instant observedAt) {
+        presence.put(Objects.requireNonNull(playerId), new Presence(online, Objects.requireNonNull(observedAt)));
+    }
+
+    public CompletableFuture<OperationResult> claimLeadership(UUID claimantId) {
+        Objects.requireNonNull(claimantId, "claimantId");
+        OperationResult ready = mutationReady();
+        if (!ready.success()) return CompletableFuture.completedFuture(ready);
+        Member claimant = stateCache.snapshot().member(claimantId);
+        if (claimant == null) return CompletableFuture.completedFuture(OperationResult.denied("You do not belong to a civilization."));
+        return executeLocked(claimant.civilizationId(), connection -> claimLeadershipTransaction(
+            connection, claimant.civilizationId(), claimantId),
+            error -> OperationResult.denied(failureMessage("claim leadership", error)));
+    }
+
+    private TxOutcome<OperationResult> claimLeadershipTransaction(Connection connection, long civilizationId,
+                                                                  UUID claimantId) throws Exception {
+        LockedCivilization civilization = lockCivilization(connection, civilizationId);
+        if (!active(civilization)) return unchanged(OperationResult.denied("The civilization is not active."));
+        LockedMember leader = lockMember(connection, civilizationId, civilization.leaderId());
+        LockedMember claimant = lockMember(connection, civilizationId, claimantId);
+        if (claimant == null) return unchanged(OperationResult.denied("You no longer belong to this civilization."));
+        if (claimant.role() == Role.LEADER) return unchanged(OperationResult.denied("You are already the leader."));
+        if (leader == null || leader.role() != Role.LEADER)
+            return unchanged(OperationResult.denied("The current leadership cannot be verified; ask an administrator to inspect it."));
+        if (leader.membershipLocked() || claimant.membershipLocked() || civilization.currentWarId() != null)
+            return unchanged(OperationResult.denied("Leadership transfer is frozen during a campaign."));
+        int advisors = lockAdvisorCount(connection, civilizationId);
+        Instant now = clock.instant();
+        Presence observed = presence.get(leader.playerId());
+        Instant lastSeen = leader.lastActiveAt();
+        if (observed != null && observed.observedAt().isAfter(lastSeen)) lastSeen = observed.observedAt();
+        OperationResult eligibility = LifecyclePolicy.validateLeadershipClaim(claimant.role(), advisors,
+            observed != null && observed.online(), lastSeen, now);
+        if (!eligibility.success()) return unchanged(eligibility);
+
+        try (PreparedStatement statement = Sql.prepare(connection,
+            "UPDATE civilizations SET leader_uuid = ?, row_version = row_version + 1 WHERE id = ?",
+            claimantId, civilizationId)) {
+            if (statement.executeUpdate() != 1) throw new IllegalStateException("Leadership claim failed");
+        }
+        try (PreparedStatement statement = Sql.prepare(connection, """
+            UPDATE civ_members SET role = CASE WHEN player_uuid = ? THEN 'LEADER' ELSE 'CITIZEN' END,
+                last_active_at = CASE WHEN player_uuid = ? THEN GREATEST(last_active_at, ?) ELSE last_active_at END
+            WHERE civ_id = ? AND player_uuid IN (?, ?)
+            """, claimantId, claimantId, now, civilizationId, leader.playerId(), claimantId)) {
+            if (statement.executeUpdate() != 2) throw new IllegalStateException("Leadership roles could not be updated");
+        }
+        AuditLog.write(connection, civilizationId, claimantId, "civilization.leadership_claimed", "player",
+            leader.playerId().toString(), Map.of("formerLeaderName", leader.lastKnownName(),
+                "newLeaderName", claimant.lastKnownName(), "formerLeaderRole", Role.CITIZEN.name(),
+                "leaderLastSeen", lastSeen.toString(), "claimantRole", claimant.role().name()), settings.serverId());
+        return changed(OperationResult.ok("You are now the leader of " + civilization.name()
+            + ". " + leader.lastKnownName() + " is now a citizen."));
     }
 
     public CompletableFuture<DisbandResult> disband(UUID leaderId, String typedCivilizationName) {
@@ -1325,6 +1384,8 @@ public final class CivilizationLifecycleService {
     }
 
     private record TxOutcome<T>(T value, boolean mutated) {}
+
+    private record Presence(boolean online, Instant observedAt) {}
 
     private record LockedCivilization(long id, String name, UUID leaderId, CivilizationStatus status,
                                       Long currentWarId, BigDecimal treasury, Instant createdAt) {}

@@ -37,6 +37,7 @@ membership:
   established-active-minutes: 120
   established-window-days: 14
   advisor-base-limit: 3
+  # Reserved for automatic succession. /civ claimleadership always uses 7 days offline.
   inactivity-succession-enabled: false
   inactivity-days: 30
   succession-notice-hours: 72

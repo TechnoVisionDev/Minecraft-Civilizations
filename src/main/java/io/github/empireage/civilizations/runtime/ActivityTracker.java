@@ -36,19 +36,27 @@ public final class ActivityTracker implements Listener, AutoCloseable {
 
     public void start() {
         Instant now = Instant.now();
-        Bukkit.getOnlinePlayers().forEach(player -> observedSince.put(player.getUniqueId(), now));
+        Bukkit.getOnlinePlayers().forEach(player -> {
+            observedSince.put(player.getUniqueId(), now);
+            lifecycle.recordPresence(player.getUniqueId(), true, now);
+            flush(player);
+        });
         task = Bukkit.getScheduler().runTaskTimer(plugin, this::flushOnline, 20L * 300, 20L * 300);
     }
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         UUID playerId = event.getPlayer().getUniqueId();
-        observedSince.put(playerId, Instant.now());
+        Instant now = Instant.now();
+        observedSince.put(playerId, now);
+        lifecycle.recordPresence(playerId, true, now);
+        flush(event.getPlayer());
     }
 
     @EventHandler
     public void onQuit(PlayerQuitEvent event) {
         UUID playerId = event.getPlayer().getUniqueId();
+        lifecycle.recordPresence(playerId, false, Instant.now());
         flush(event.getPlayer()).whenComplete((ignored, error) -> {
             pendingWrites.computeIfPresent(playerId, (id, current) -> current.isDone() ? null : current);
             // A failed final write remains available if the player reconnects.

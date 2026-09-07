@@ -77,7 +77,7 @@ public final class CivCommand implements CommandExecutor, TabCompleter {
     private static final int MAX_CHAT_LENGTH = 256;
     private static final Set<String> ROOT_COMMANDS = Set.of(
         "help", "tutorial", "create", "info", "list", "map", "inspect", "chat",
-        "invite", "accept", "deny", "members", "kick", "leave", "advisor", "transfer", "disband",
+        "invite", "accept", "deny", "members", "kick", "leave", "advisor", "transfer", "claimleadership", "disband",
         "claim", "unclaim", "setcapital", "sethome", "home", "teleport", "plot",
         "refine", "deposit", "stockpile", "items", "customitems", "workorders", "orders", "tech", "techtree", "research", "treasury", "taxes", "war"
     );
@@ -167,6 +167,7 @@ public final class CivCommand implements CommandExecutor, TabCompleter {
                 case "leave" -> leave(sender, args);
                 case "advisor" -> advisor(sender, args);
                 case "transfer" -> transfer(sender, args);
+                case "claimleadership" -> claimLeadership(sender, args);
                 case "disband" -> disband(sender, args);
                 case "claim" -> claim(sender, args);
                 case "unclaim" -> unclaim(sender, args);
@@ -266,6 +267,7 @@ public final class CivCommand implements CommandExecutor, TabCompleter {
                 "&e/civ accept <name>&7 or &e/civ deny <name> &8— &7respond to an invitation.",
                 "&e/civ members [page] &8— &7view roles and establishment progress.",
                 "&e/civ advisor <add | remove> <player> &8— &7leader manages advisors.",
+                "&e/civ claimleadership &8— &7after the leader is offline 7 days; advisors, or citizens if no advisors exist.",
                 "&e/civ kick <player>&7, &eleave&7, &etransfer <player>&7, &edisband &8— &7manage departures and leadership.",
                 "&7Property-affecting kicks and disbanding require the green/red confirmation menu."),
             List.of(
@@ -626,6 +628,13 @@ public final class CivCommand implements CommandExecutor, TabCompleter {
         Member target = memberByName(actor.civilizationId(), args[1]).orElseThrow(
             () -> new IllegalArgumentException("That player is not a member of your civilization."));
         mutate(player, "leadership-transfer", () -> lifecycle.transferLeadership(player.getUniqueId(), target.playerId()));
+    }
+
+    private void claimLeadership(CommandSender sender, String[] args) {
+        Player player = player(sender);
+        if (args.length != 1) throw usage("/civ claimleadership");
+        requireMembership(player);
+        mutate(player, "leadership-claim", () -> lifecycle.claimLeadership(player.getUniqueId()));
     }
 
     private void disband(CommandSender sender, String[] args) {

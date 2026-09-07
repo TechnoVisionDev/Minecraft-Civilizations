@@ -31,6 +31,8 @@ All notable release changes are documented here. Database migrations are forward
 
 ### Added
 
+- `/civ claimleadership` lets an advisor replace a leader who has been offline for seven full days, or a citizen when no advisors exist. Claims recheck current roles, presence, and activity under database locks; the first successful claim wins and the former leader becomes a citizen. Campaign locks still apply. Login activity is now saved immediately, with live login/logout observations protecting pending saves.
+
 - A written tutorial book for first-time players and `/civ tutorial` replacements, with a saved 24-hour per-player cooldown, full-inventory handling, and pending welcome-book retries on join.
 
 - `/wild` with a persistent 12-hour cooldown, safe random surface destinations within the configured Overworld's current world border, and claim/hazard checks.

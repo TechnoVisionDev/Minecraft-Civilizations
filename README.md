@@ -293,6 +293,8 @@ The default membership-change cooldown is **24 hours after departure**. Joining 
 
 Use `/civ transfer <player>` to make another current member the leader. The former leader becomes an advisor if a slot is available (or the recipient vacated one), otherwise a citizen.
 
+If the leader has been **offline for seven full days**, use **`/civ claimleadership`** to take over. Any current advisor can claim it; citizens can claim it **only when the civilization has no advisors at all**, including offline advisors. The first eligible claim that succeeds becomes leader. The former leader stays in the civilization as a citizen, keeping their property. Reconnecting resets the seven-day wait, and an online leader cannot be replaced this way. Claims use saved activity plus current login/logout observations, survive restarts through saved activity, and recheck the current leader and advisor roster under database locks. Existing campaign membership locks still prevent leadership changes.
+
 `/civ disband` previews and confirms archival of the civilization. It releases claims, ends membership/private rights, clears invitations, and cancels active research. Remaining treasury money is staged for payout to the former leader; it is not divided among citizens. Physical builds remain in the world, but the civilization’s protection ends. Campaign locks and unresolved-operation checks can prevent disbanding.
 
 ### Who can do what
@@ -306,6 +308,7 @@ Use `/civ transfer <player>` to make another current member the leader. The form
 | Start/cancel research; complete stockpile work orders | No | Yes | Yes |
 | Set the civilization home in its capital | No | Yes | Yes |
 | Appoint advisors, transfer leadership, disband | No | No | Yes |
+| Claim leadership after the leader is offline 7 days | Only if no advisors exist | Yes | Already leader |
 | Move the capital, withdraw treasury money, set weekly taxes | No | No | Yes |
 | Declare/cancel a campaign or offer/accept peace | No | No | Yes |
 
@@ -792,6 +795,7 @@ Civilization gameplay is under `/civ`; standalone commands are `/wild`, `/nether
 | `/civ leave` | Leave the civilization, subject to membership and war locks. |
 | `/civ advisor <add \| remove> <player>` | Promote or demote an advisor; leader only. |
 | `/civ transfer <player>` | Transfer leadership to another member; leader only. |
+| `/civ claimleadership` | Claim leadership after the leader is offline 7 days; advisors first, citizens only if no advisors exist. First eligible successful claim wins. |
 | `/civ disband` | Preview and then confirm archival in a GUI; leader only. |
 
 ### Territory and plots
@@ -960,7 +964,7 @@ A resource amount uses a stable key such as `"masonry:2": 4`. It means four Tier
 | `notifications.research-check-seconds` / `war-tick-seconds` | `30` / `1` | Research and war processing intervals |
 | `notifications.invariant-check-minutes` | `30` | Periodic data-consistency scan |
 
-The `membership.inactivity-succession-enabled`, `inactivity-days`, and `succession-notice-hours` settings are parsed, but this implementation does not run an automatic succession worker. Do not rely on them to transfer an inactive leader's role; use a reviewed administrator repair when necessary.
+Leadership succession is player-initiated through `/civ claimleadership` after a fixed **7 days offline**. The legacy `membership.inactivity-succession-enabled`, `inactivity-days`, and `succession-notice-hours` settings remain reserved for automatic succession and do not enable, disable, delay, or change this command. No automatic transfer or additional notice period applies.
 
 The **12-hour `/wild` cooldown**, random-search bounds, and **weekly tax period** are implementation constants, not existing YAML settings. The weekly tax **amount** is civilization-specific database state set by `/civ taxes set`; it is not `plots.sale-tax-percent`.
 
