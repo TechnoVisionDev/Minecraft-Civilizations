@@ -2,7 +2,7 @@
 
 All notable release changes are documented here. Database migrations are forward-only; follow [docs/OPERATIONS.md](docs/OPERATIONS.md) before upgrading or rolling back.
 
-## Unreleased
+## 1.0.1 — 2026-09-07
 
 ### Fixed
 

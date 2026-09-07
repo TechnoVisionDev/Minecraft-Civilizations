@@ -38,7 +38,7 @@ p { overflow-wrap:anywhere; }
 <li><strong>Client:</strong> Minecraft Java Edition; no client mod required</li>
 <li><strong>Currency features:</strong> Optional; require Vault and a registered economy provider</li>
 <li><strong>Deployment:</strong> One active Minecraft server per Civilizations database schema</li></ul>
-<p>The current source version is 1.0.0. Compatibility with other server distributions is not established by this project; Folia support is not declared.</p>
+<p>The current source version is 1.0.1. Compatibility with other server distributions is not established by this project; Folia support is not declared.</p>
 <p><em>Numbers below describe the bundled defaults. In-game menus reflect your server&#x27;s current settings.</em></p>
 <p style="font-size:22px;margin:24px 0 12px"><strong>Build a civilization together</strong></p>
 <p>Found a named civilization, invite citizens, appoint advisors, and establish a government with clear responsibilities. Leaders direct the nation; advisors help manage membership, territory, and research; citizens contribute resources and develop their own property.</p>
@@ -119,14 +119,14 @@ p { overflow-wrap:anywhere; }
 <p><strong>This plugin changes vanilla survival progression.</strong> Villager and wandering-trader commerce is disabled. Physical Nether/End portals and End gateways are suppressed; players travel with commands. In default strict mode, many vanilla actions require civilization research, including for players who have not joined a civilization.</p>
 <p style="font-size:22px;margin:24px 0 12px"><strong>Installation</strong></p>
 <ol><li>Prepare a Spigot 26.2 server running Java 25 and a reachable MySQL 8.x database. Use a dedicated schema and database account with the permissions needed for automatic schema migrations.</li>
-<li>Stop the server and place Civilizations-1.0.0.jar in the plugins folder. Install any optional integrations you want to use.</li>
+<li>Stop the server and place Civilizations-1.0.1.jar in the plugins folder. Install any optional integrations you want to use.</li>
 <li>Start once to generate the Civilizations configuration files, then stop before admitting players. The initial placeholder database credentials may cause connection warnings.</li>
 <li>Edit plugins/Civilizations/config.yml with your database endpoint and credentials. Set the allowed claim worlds and the Overworld, Nether, and End travel world names to match your loaded worlds.</li>
 <li>For currency features, install both Vault and an economy provider, then set economy.mode to VAULT. Otherwise leave it DISABLED.</li>
 <li>Set appropriate world borders and choose your war timezone and weekly window. The plugin does not create or load destination worlds.</li>
 <li>Start the server and wait for the message: “MySQL is ready and the authoritative civilization cache is loaded.” Database migrations apply automatically.</li>
 <li>Run /civ admin migrate and /civ admin invariants, then check founding, protection, menus, and travel with a normal player account before opening the server.</li></ol>
-<p>If you build from source, use JDK 25 and Maven, run mvn clean verify, and install target/Civilizations-1.0.0.jar.</p>
+<p>If you build from source, use JDK 25 and Maven, run mvn clean verify, and install target/Civilizations-1.0.1.jar.</p>
 <p style="font-size:22px;margin:24px 0 12px"><strong>Your first civilization</strong></p>
 <ol><li>Read your tutorial book or run /civ help.</li>
 <li>Use /civ list to find a community to join, or gather founding materials for your own.</li>

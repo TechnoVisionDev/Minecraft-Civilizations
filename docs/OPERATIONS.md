@@ -1,6 +1,6 @@
 # Civilizations Operations Guide
 
-This guide is for server owners and administrators operating Civilizations `1.0.0` on Minecraft Java Edition/Spigot `26.2`, Java `25`, and MySQL `8.x`.
+This guide is for server owners and administrators operating Civilizations `1.0.1` on Minecraft Java Edition/Spigot `26.2`, Java `25`, and MySQL `8.x`.
 
 ## Production assumptions
 
@@ -41,7 +41,7 @@ Do not place the database password on a public issue, in a paste, or in a startu
    ```
 
 2. Stop the Minecraft server cleanly and confirm the process has exited.
-3. Put `Civilizations-1.0.0.jar` in `plugins/`. Remove older Civilizations jars so only one copy can load.
+3. Put `Civilizations-1.0.1.jar` in `plugins/`. Remove older Civilizations jars so only one copy can load.
 4. On a first installation, start briefly to generate the data folder, then stop before opening the server to players.
 5. Edit `plugins/Civilizations/config.yml`:
    - set `server-id` to a stable identifier for this server;

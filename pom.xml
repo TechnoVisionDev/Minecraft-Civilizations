@@ -6,7 +6,7 @@
 
     <groupId>io.github.empireage</groupId>
     <artifactId>civilizations</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1</version>
     <name>Civilizations</name>
     <description>Persistent civilization, territory, research, economy, and scheduled-war gameplay for Spigot.</description>
 

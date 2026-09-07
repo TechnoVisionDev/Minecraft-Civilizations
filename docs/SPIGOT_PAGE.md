@@ -2,7 +2,7 @@
 
 - **Resource title:** Civilizations | Nations, Research & Scheduled Wars
 - **Tagline:** Build nations, claim land, research technology, worship gods, and wage scheduled wars.
-- **Version:** 1.0.0
+- **Version:** 1.0.1
 - **Author:** EmpireAge
 - **Declared server target:** Spigot 26.2
 - **Java required:** 25
@@ -37,7 +37,7 @@ Start as a small settlement. Organize farmers, builders, miners, and defenders. 
 - **Currency features:** Optional; require Vault and a registered economy provider
 - **Deployment:** One active Minecraft server per Civilizations database schema
 
-The current source version is 1.0.0. Compatibility with other server distributions is not established by this project; Folia support is not declared.
+The current source version is 1.0.1. Compatibility with other server distributions is not established by this project; Folia support is not declared.
 
 *Numbers below describe the bundled defaults. In-game menus reflect your server's current settings.*
 
@@ -161,7 +161,7 @@ Campaigns end when their scheduled window expires or both leaders accept peace. 
 ## Installation
 
 1. Prepare a Spigot 26.2 server running Java 25 and a reachable MySQL 8.x database. Use a dedicated schema and database account with the permissions needed for automatic schema migrations.
-2. Stop the server and place Civilizations-1.0.0.jar in the plugins folder. Install any optional integrations you want to use.
+2. Stop the server and place Civilizations-1.0.1.jar in the plugins folder. Install any optional integrations you want to use.
 3. Start once to generate the Civilizations configuration files, then stop before admitting players. The initial placeholder database credentials may cause connection warnings.
 4. Edit plugins/Civilizations/config.yml with your database endpoint and credentials. Set the allowed claim worlds and the Overworld, Nether, and End travel world names to match your loaded worlds.
 5. For currency features, install both Vault and an economy provider, then set economy.mode to VAULT. Otherwise leave it DISABLED.
@@ -169,7 +169,7 @@ Campaigns end when their scheduled window expires or both leaders accept peace. 
 7. Start the server and wait for the message: “MySQL is ready and the authoritative civilization cache is loaded.” Database migrations apply automatically.
 8. Run /civ admin migrate and /civ admin invariants, then check founding, protection, menus, and travel with a normal player account before opening the server.
 
-If you build from source, use JDK 25 and Maven, run mvn clean verify, and install target/Civilizations-1.0.0.jar.
+If you build from source, use JDK 25 and Maven, run mvn clean verify, and install target/Civilizations-1.0.1.jar.
 
 ## Your first civilization
 

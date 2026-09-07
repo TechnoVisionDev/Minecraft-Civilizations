@@ -7,7 +7,7 @@ This README is both the **server hosting guide** and the **player wiki** for the
 | Project | Target |
 | --- | --- |
 | Plugin name | Civilizations |
-| Artifact version | `1.0.0` |
+| Artifact version | `1.0.1` |
 | Minecraft / Spigot API | `26.2` |
 | Java | `25` |
 | Build | Maven; shaded plugin JAR |
@@ -107,7 +107,7 @@ Both version commands should report Java 25 for their respective processes. Mave
 Install this artifact:
 
 ```text
-target/Civilizations-1.0.0.jar
+target/Civilizations-1.0.1.jar
 ```
 
 Do not install an `original-*.jar`, a source JAR, or a test JAR. The release JAR includes its database/runtime libraries; the server provides the Spigot API.
@@ -135,7 +135,7 @@ Privileges are limited to this dedicated schema. Schema creation/alteration priv
 ### 4. Install and generate configuration
 
 1. Stop the Minecraft server.
-2. Copy `Civilizations-1.0.0.jar` into `plugins/`, removing older Civilizations JARs from that directory.
+2. Copy `Civilizations-1.0.1.jar` into `plugins/`, removing older Civilizations JARs from that directory.
 3. Add any optional integration plugins you plan to use.
 4. Start once to generate `plugins/Civilizations/`, then stop before admitting players.
 5. Edit the generated configuration and catalogs.
@@ -1121,7 +1121,7 @@ When reporting a bug, include the exact plugin/server/Java versions, reproductio
 mvn clean verify
 ```
 
-The result is `target/Civilizations-1.0.0.jar`. Java 25 and Maven are required. Spigot is a provided dependency; HikariCP, MySQL Connector/J, Gson, and the logging bridge are included through the shaded build. Do not copy those dependency JARs individually into the game server's plugins directory.
+The result is `target/Civilizations-1.0.1.jar`. Java 25 and Maven are required. Spigot is a provided dependency; HikariCP, MySQL Connector/J, Gson, and the logging bridge are included through the shaded build. Do not copy those dependency JARs individually into the game server's plugins directory.
 
 For a local package without tests:
 
