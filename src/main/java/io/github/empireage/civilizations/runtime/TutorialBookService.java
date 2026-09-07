@@ -229,16 +229,17 @@ public final class TutorialBookService implements Listener {
                 to donate currency."""),
             page("12. The gods", """
                 /religion
-                Meet the Greek gods,
-                gifts and blessings.
+                Gods, gifts and boons.
 
                 Hold an offering:
                 /sacrifice <god>
 
                 Gifts are consumed.
-                Acceptance is random;
-                read the menu's rules
-                and cooldowns first."""),
+                Success raises favor
+                with that god (1-3).
+                Favor eases the rolls.
+                See menu for rules
+                and cooldowns."""),
             page("13. War", """
                 /civ war status
                 Check the opponent,

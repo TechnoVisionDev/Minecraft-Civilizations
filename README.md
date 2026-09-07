@@ -51,7 +51,7 @@ This README is both the **server hosting guide** and the **player wiki** for the
 - A technology tree that unlocks equipment, transport, industry, enchanting, brewing, dimensions, and civilization capacity.
 - Vault-backed resource sales, plot purchases, treasuries, and automatic weekly private-plot taxes.
 - Automatic first-join wilderness placement, `/wild`, and safe random Nether/End travel.
-- Six Greek gods with offerings, temporary blessings, and per-god sacrifice cooldowns.
+- Six Greek gods with offerings, temporary blessings, persistent favor levels, and per-god sacrifice cooldowns.
 - Scheduled war windows for fighting, territory breaking, and looting, followed by truces.
 - MySQL persistence, automatic schema migrations, transaction history, administrator diagnostics, and recovery of interrupted payments.
 
@@ -691,16 +691,21 @@ Religion is available through `/religion`, independent of civilization leadershi
 
 Blessings last **30 minutes** by default. The sacrifice cooldown is **4 hours per player, per god**, and persists in MySQL. Choosing a god for `/sacrifice` is a menu/command selection, not a permanent faction conversion.
 
-A recorded sacrifice consumes the **entire held stack**, succeeds only if it is the correct item and its size **exceeds** a random roll from **1 through 32**, and starts that god's cooldown whether accepted or rejected. Rejection grants no blessing and calls down lightning. Sacrifices require Survival or Adventure mode.
+Every player starts at **favor level 1 with each god**. Each successful sacrifice raises favor with that god by **one level**, up to **level 3**. Favor is personal and independent for each deity, persists across reconnects and server restarts, and does not decay or drop on rejection. The reduced roll range applies to the **next** sacrifice.
 
-For a correct item, the default chance is:
+| Favor level | Random roll (inclusive) | Successes needed from level 1 |
+| --- | --- | --- |
+| 1 | 1–30 | 0 |
+| 2 | 1–25 | 1 |
+| 3 | 1–20 | 2 |
 
-| Stack offered | Acceptance chance |
-| --- | --- |
-| 1 | 0% |
-| 16 | 15/32 = 46.875% |
-| 32 | 31/32 = 96.875% |
-| 33 or more | 100% |
+A recorded sacrifice consumes the **entire held stack**, succeeds only if it is the correct item and its size **exceeds** the random roll for your current favor level, and starts that god's cooldown whether accepted or rejected. Rejection grants no blessing or favor and calls down lightning. Sacrifices require Survival or Adventure mode.
+
+For the correct item, acceptance chance is `min(stack size − 1, maximum roll) / maximum roll`. At level 1, a stack of 16 has a **15/30 (50%)** chance and a stack of 30 has a **29/30 (about 96.67%)** chance: matching the roll is still a rejection. Guaranteed acceptance requires 31 correct items at level 1, 26 at level 2, or 21 at level 3. A single item never succeeds.
+
+The pantheon GUI shows each god's **favor level, current roll range, next-success upgrade (or maximum favor), offering, blessing, and cooldown**. Successful sacrifices also report your updated level and future roll range in chat. Choosing another god does not reset your existing relationships.
+
+Migration **V7** automatically creates persistent deity favor storage. Existing players start at level 1 with every god; previous sacrifices are not credited retroactively, and existing cooldowns remain in effect. Migration **V8** caps any previously earned level 4 or 5 favor at level 3, preserving levels 1–3 and all cooldowns.
 
 The wrong material is rejected regardless of amount. A cooldown or storage denial is not an accepted sacrifice; the command restores items when the result proves restoration is safe. Read the offering in the menu before using the command, since offering the wrong held stack is still a real trial.
 
@@ -826,8 +831,8 @@ Civilization gameplay is under `/civ`; standalone commands are `/wild`, `/nether
 | `/civ stockpile [history [page]]` | Open the stockpile GUI with all civic items, stack counts, and detailed hover totals; `history` shows the ledger. |
 | `/civ items` | Open the tiered custom-item browser; click an item to view its recipe. |
 | `/civ workorders` or `/civ orders` | Compare each persistent order with the shared stockpile; leaders/advisors may click a ready order to spend its resources and earn Knowledge. |
-| `/religion [god]` | Open the Greek pantheon or choose a god directly; the GUI lists offerings, blessings, and cooldowns. |
-| `/sacrifice [god]` | Offer the entire held stack to the selected god. A correct stack must exceed a random roll of 1–32; rejection consumes it and calls down lightning. |
+| `/religion [god]` | Open the Greek pantheon or choose a god directly; the GUI lists favor levels, roll ranges, next upgrades, offerings, blessings, and cooldowns. |
+| `/sacrifice [god]` | Offer the entire held stack to the selected god. A correct stack must exceed a favor-based roll (initially 1–30, down to 1–20 at level 3). Success raises favor; rejection consumes it and calls down lightning. |
 | `/civ tech`, `/civ techtree`, `/civ research tree` | Open the technology tree and select active research. |
 | `/civ research start <technology>` | Start research; leader/advisor. |
 | `/civ research status` | Show occupied queues and completion times. |
@@ -1097,7 +1102,7 @@ Keep clocks synchronized and monitor database/cache failures, stale economy oper
 | Work orders are not using the items in my hand | Ready orders consume shared stockpile balances and must be completed by a leader/advisor. |
 | Research did not instantly unlock at the displayed time | Completion is checked periodically, every 30 seconds by default, and requires healthy storage. |
 | My private plot became civic land | Possible causes include verified unpaid tax, surrender, or departure/removal. War does not transfer ownership. Inspect `/civ taxes` and ask an administrator to check the audit history. |
-| Why did 32 offerings fail? | Your stack must strictly exceed the 1–32 roll. A roll of 32 rejects 32 items; 33 correct items guarantee acceptance under the defaults. |
+| Why did 30 offerings fail? | Your stack must strictly exceed the roll for your favor level (1–30 initially). A roll of 30 rejects 30 items at level 1. Build favor to lower the maximum roll, reaching 1–20 at level 3. |
 | I changed `config.yml` but behavior is unchanged | `/civ admin reload` only reloads messages and validates configuration. Structural/gameplay changes require a full restart. |
 | A customized catalog was replaced | Startup detected a mismatched catalog version or legacy format and backed it up before restoring the shipped format. Review `.pre-v*.bak` and reapply compatible changes. |
 | Can I connect several servers to one schema? | Not with this implementation. There is no cross-server cache invalidation; use a separate schema per active server. |

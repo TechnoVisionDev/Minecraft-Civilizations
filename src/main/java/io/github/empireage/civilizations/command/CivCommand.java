@@ -296,7 +296,7 @@ public final class CivCommand implements CommandExecutor, TabCompleter {
                 "&e/civ stockpile [history [page]] &8— &7open the stockpile GUI or inspect the contribution ledger.",
                 "&e/civ workorders (or /civ orders) &8— &7compare persistent orders with shared stockpile balances.",
                 "&7Everyone can deposit; leaders/advisors click ready orders to spend their requirements.",
-                "&e/religion &8— &7inspect Greek gods, offerings, blessings, and cooldowns."),
+                "&e/religion &8— &7inspect Greek gods, favor, offerings, blessings, and cooldowns."),
             List.of(
                 "&eResearch tutorial &8— &7Knowledge and prerequisites unlock permanent civilization advances.",
                 "&e/civ tech &8— &7open the technology tree, inspect prerequisites, and select active research.",

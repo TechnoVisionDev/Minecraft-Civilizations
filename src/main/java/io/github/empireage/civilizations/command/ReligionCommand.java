@@ -38,7 +38,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.logging.Level;
 
 /** Pantheon menu and inventory-backed sacrifice command. */
@@ -87,11 +86,12 @@ public final class ReligionCommand implements CommandExecutor, TabCompleter, Lis
 
     private void openPantheon(Player player) {
         Instant now = Instant.now();
-        service.cooldowns(player.getUniqueId(), now).whenComplete((cooldowns, error) -> mainThread.run(() -> {
+        service.progress(player.getUniqueId()).whenComplete((progress, error) -> mainThread.run(() -> {
             if (error != null) {
                 player.sendMessage(ChatColor.RED + "The pantheon cannot be reached while storage is unavailable.");
                 return;
             }
+            if (!player.isOnline()) return;
             PantheonHolder holder = new PantheonHolder();
             Inventory menu = Bukkit.createInventory(holder, 27, "The Greek Pantheon");
             holder.inventory = menu;
@@ -104,9 +104,11 @@ public final class ReligionCommand implements CommandExecutor, TabCompleter, Lis
                 god.description().forEach(line -> lore.add("&7" + line));
                 lore.add("");
                 lore.add("&eOffering: &f" + readable(god.offering()));
-                lore.add("&eTrial: &fYour stack must exceed a roll of 1-32");
+                ReligionService.GodProgress standing = progress.getOrDefault(god.key(),
+                    new ReligionService.GodProgress(1, null));
+                lore.addAll(favorLore(standing.favorLevel()));
                 lore.add("&eBlessing: &f" + blessing(god));
-                Instant available = cooldowns.get(god.key());
+                Instant available = standing.availableAt();
                 lore.add(available == null || !now.isBefore(available)
                     ? "&aAvailable — click to choose"
                     : "&cAvailable " + TimeUtil.relative(available, now));
@@ -150,11 +152,9 @@ public final class ReligionCommand implements CommandExecutor, TabCompleter, Lis
         ItemStack removed = held.clone();
         player.getInventory().setItemInMainHand(null);
         player.saveData();
-        int roll = ThreadLocalRandom.current().nextInt(1, 33);
-        boolean success = qualifies(removed.getType(), removed.getAmount(), god.offering(), roll);
         Instant now = Instant.now();
-        service.record(playerId, god.key(), removed.getType().getKey().toString(), removed.getAmount(), roll,
-            success, now).whenComplete((result, error) -> mainThread.run(() -> {
+        service.record(playerId, god.key(), removed.getType().getKey().toString(), removed.getAmount(),
+            removed.getType() == god.offering(), now).whenComplete((result, error) -> mainThread.run(() -> {
                 inFlight.remove(playerId);
                 if (error != null) {
                     restore(player, removed);
@@ -179,8 +179,12 @@ public final class ReligionCommand implements CommandExecutor, TabCompleter, Lis
                         + "to prevent duplication; ask an administrator to review operation " + result.operationId() + ".");
                     return;
                 }
-                if (success) accept(player, god, roll, removed.getAmount());
-                else reject(player, god, roll, removed);
+                if (result.success()) {
+                    accept(player, god, result.roll(), removed.getAmount());
+                    player.sendMessage(ChatColor.GOLD + "Favor with " + god.name() + ": level "
+                        + result.favorLevel() + "/" + ReligionService.MAX_FAVOR_LEVEL
+                        + ". Future divine rolls: 1-" + ReligionService.maxRoll(result.favorLevel()) + ".");
+                } else reject(player, god, result.roll(), removed);
             }));
     }
 
@@ -207,9 +211,14 @@ public final class ReligionCommand implements CommandExecutor, TabCompleter, Lis
             + ". The stack is consumed and no blessing is granted.");
     }
 
-    static boolean qualifies(Material actual, int amount, Material required, int roll) {
-        if (roll < 1 || roll > 32) throw new IllegalArgumentException("Divine roll must be between 1 and 32");
-        return actual == required && amount > roll;
+    static List<String> favorLore(int level) {
+        return List.of(
+            "&eFavor: &fLevel " + level + "/" + ReligionService.MAX_FAVOR_LEVEL,
+            "&eTrial: &fYour stack must exceed a roll of 1-" + ReligionService.maxRoll(level),
+            level < ReligionService.MAX_FAVOR_LEVEL
+                ? "&aNext success: level " + (level + 1) + " (rolls 1-" + ReligionService.maxRoll(level + 1) + ")"
+                : "&aMaximum favor reached",
+            "&7The entire held stack is consumed.");
     }
 
     private static void restore(Player player, ItemStack item) {

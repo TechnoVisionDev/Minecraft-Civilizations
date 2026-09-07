@@ -20,7 +20,9 @@ public final class MigrationRunner {
         new Migration(3, "civilization names only", "db/migration/V3__civilization_names_only.sql"),
         new Migration(4, "final progression catalog cleanup", "db/migration/V4__final_progression_catalog_cleanup.sql"),
         new Migration(5, "religion sacrifices", "db/migration/V5__religion_sacrifices.sql"),
-        new Migration(6, "weekly plot taxes", "db/migration/V6__weekly_plot_taxes.sql")
+        new Migration(6, "weekly plot taxes", "db/migration/V6__weekly_plot_taxes.sql"),
+        new Migration(7, "deity favor", "db/migration/V7__deity_favor.sql"),
+        new Migration(8, "three favor levels", "db/migration/V8__three_favor_levels.sql")
     );
 
     private MigrationRunner() {}

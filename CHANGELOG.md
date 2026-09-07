@@ -15,6 +15,8 @@ All notable release changes are documented here. Database migrations are forward
 
 ### Changed
 
+- Each player now builds persistent favor with each god from level 1 to 3, gaining one level per successful sacrifice. Divine rolls start at 1–30 and decrease by 5 per level to 1–20. The pantheon shows favor, current trial range, and the next upgrade; success messages report the new level. Migration `V7` adds favor storage, starting existing worshippers at level 1 while preserving cooldowns. Migration `V8` caps previously earned levels 4–5 at level 3.
+
 - Demeter accepts bread instead of wheat. Existing default wheat offerings migrate with a backup while preserving other religion settings.
 - Nether and End travel now require a craftable Nether Ember or End Sigil alongside expedition research, consuming one only on successful travel. Recipe-book discovery and `/nether recipe` / `/end recipe` explain the exploration-focused ingredients.
 
@@ -38,7 +40,7 @@ All notable release changes are documented here. Database migrations are forward
 - Automatic civic reclamation of the specific plot on verified insufficient funds, preserving builds and excluding all public/capital plots. Provider errors and ambiguous outcomes never trigger reclamation.
 - Forward migration `V6` for tax policies, ownership-specific billing schedules, and restart-safe tax bills. Purchase confirmations show the recurring rate, and new ownership/rate changes allow at least seven days before charging.
 
-- A configurable Greek pantheon GUI and `/sacrifice` flow with per-god offerings, random 1–32 acceptance trials, blessings, lightning rejection, and persistent four-hour per-player cooldowns.
+- A configurable Greek pantheon GUI and `/sacrifice` flow with per-god offerings, favor-based random acceptance trials, blessings, lightning rejection, and persistent four-hour per-player cooldowns.
 - Forward migration `V5` for restart-safe sacrifice cooldown and outcome history.
 
 ## 1.0.0 — 2026-08-17

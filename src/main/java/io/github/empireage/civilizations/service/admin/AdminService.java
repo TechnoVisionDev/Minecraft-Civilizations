@@ -63,14 +63,16 @@ import java.util.concurrent.CompletableFuture;
  * callers behave identically.
  */
 public final class AdminService {
-    private static final int EXPECTED_SCHEMA_VERSION = 5;
+    private static final int EXPECTED_SCHEMA_VERSION = 8;
     private static final Map<Integer, String> PACKAGED_MIGRATIONS = Map.of(
         1, "db/migration/V1__initial_schema.sql",
         2, "db/migration/V2__persistent_progression.sql",
         3, "db/migration/V3__civilization_names_only.sql",
         4, "db/migration/V4__final_progression_catalog_cleanup.sql",
         5, "db/migration/V5__religion_sacrifices.sql",
-        6, "db/migration/V6__weekly_plot_taxes.sql");
+        6, "db/migration/V6__weekly_plot_taxes.sql",
+        7, "db/migration/V7__deity_favor.sql",
+        8, "db/migration/V8__three_favor_levels.sql");
     private static final Set<String> REQUIRED_TABLES = Set.of(
         "schema_history", "civilizations", "civ_coordination_locks", "civ_members", "player_membership_history",
         "member_activity_daily", "civ_invites", "civ_claims", "plot_trust", "civ_stockpile",
@@ -78,7 +80,7 @@ public final class AdminService {
         "daily_work_orders", "work_order_contributions", "work_orders", "persistent_work_order_contributions",
         "wars", "war_roster", "war_objectives",
         "war_block_changes", "economy_operations", "treasury_ledger", "civ_audit_log",
-        "player_settings", "civ_milestones", "sacrifice_cooldowns",
+        "player_settings", "civ_milestones", "sacrifice_cooldowns", "deity_favor",
         "civ_plot_taxes", "plot_tax_accounts", "plot_tax_bills"
     );
 
