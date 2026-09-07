@@ -276,7 +276,8 @@ public final class CivCommand implements CommandExecutor, TabCompleter {
                 "&e/civ setcapital &8— &7move the capital here; leader only.",
                 "&e/civ sethome&7 and &e/civ home &8— &7set the civic home and teleport there.",
                 "&e/civ teleport <overworld | nether | end> &8— &7dimension travel; Overworld returns to its arrival point.",
-                "&e/nether&7 and &e/end &8— &7random safe dimension wilderness; expedition technology required.",
+                "&e/nether&7 and &e/end &8— &7safe dimension wilderness; expedition tech and a ritual offering required.",
+                "&e/nether recipe&7 and &e/end recipe &8— &7craft the offering consumed for each successful trip.",
                 "&e/wild &8— &7random safe Overworld wilderness; 12-hour cooldown, free first-join placement.",
                 "&7Costly territory changes open a confirmation menu and recheck conditions when accepted."),
             List.of(

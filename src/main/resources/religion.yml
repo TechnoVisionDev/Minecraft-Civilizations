@@ -1,4 +1,4 @@
-catalog-version: 1
+catalog-version: 2
 cooldown: 4h
 buff-duration: 30m
 
@@ -30,7 +30,7 @@ gods:
   demeter:
     name: Demeter
     icon: WHEAT
-    offering: WHEAT
+    offering: BREAD
     description:
       - Guardian of harvests and fertile earth.
     buffs:

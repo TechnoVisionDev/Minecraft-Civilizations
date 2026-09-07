@@ -133,16 +133,16 @@ public final class TutorialBookService implements Listener {
                 Check costs first!"""),
             page("4. Chat & travel", """
                 /chat global
-                Talk to the server.
                 /chat local
-                Talk to nearby people.
                 /chat civ
-                Talk to your civ.
-
+                Choose your chat.
                 /civ home
                 Go to the civ home.
                 /nether and /end
-                Need expedition tech."""),
+                Need expedition tech
+                and a ritual offering.
+                /nether recipe
+                /end recipe"""),
             page("5. Craft resources", """
                 /civ items
                 Browse custom items.

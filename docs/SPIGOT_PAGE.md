@@ -9,7 +9,7 @@
 - **Required storage:** MySQL 8.x
 - **Optional integrations:** Vault with an economy provider, PlaceholderAPI, WorldGuard, CoreProtect
 
-Paste the companion `SPIGOT_PAGE.bbcode.txt` into the resource description's BBCode editor. The copy below is the readable version of that description.
+For the rich text editor, open `SPIGOT_PAGE.rich-text.html` in a browser, click **Copy formatted page**, and paste normally into the resource description. If clipboard access is unavailable, click **Select page text** and copy the selection. The HTML version uses formatted headings, paragraphs, and lists; commands and permissions appear as normal list entries. The copy below is the readable reference version.
 
 The server target above comes from this repository's build and plugin manifest. Only mark a version as **tested** on Spigot after running the release on that version. No runtime compatibility test was performed as part of writing this page. Add source, documentation, support, donation, or video links to the listing only when their public destinations are available; this draft does not invent those URLs.
 
@@ -120,7 +120,7 @@ Open the pantheon, choose a god, and offer the stack in your hand for a chance a
 
 - **Zeus:** Gold ingots — Speed I and Jump Boost II.
 - **Poseidon:** Cod — Water Breathing I and Dolphin's Grace I.
-- **Demeter:** Wheat — Regeneration I and Health Boost I.
+- **Demeter:** Bread — Regeneration I and Health Boost I.
 - **Ares:** Iron ingots — Strength I and Resistance I.
 - **Athena:** Books — Haste I and Luck I.
 - **Artemis:** Feathers — Speed I and Night Vision I.
@@ -151,7 +151,7 @@ Campaigns end when their scheduled window expires or both leaders accept peace. 
 - Paginated help, topic shortcuts, and command tab completion.
 - Automatic first-join placement on safe, unclaimed Overworld ground.
 - /wild for another wilderness destination, with a 12-hour cooldown after a successful manual use.
-- Civilization home travel and research-gated /nether and /end commands.
+- Civilization home travel and /nether and /end commands requiring expedition research and crafted ritual offerings.
 - Safe random dimension destinations inside the target world's border.
 - Global, local, and civilization chat; local range defaults to 100 blocks.
 - Confirmation menus for costly or destructive gameplay actions.

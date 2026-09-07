@@ -1,0 +1,3 @@
+Edited with the built-in image generation tool.
+
+Edit this Civilizations Spigot resource icon. Change only the background to be complete and fully opaque throughout the entire square canvas, including all four corners and all spaces around the emblem. Retain the midnight navy blue background with subtle blue illumination behind the temple, extending edge to edge. Absolutely no transparency, no transparent pixels, no cutout or checkerboard. Preserve the existing temple, gold laurel wreath, grass and stone base, lighting, colors, proportions, composition and details unchanged. No text. Output a full square opaque image.

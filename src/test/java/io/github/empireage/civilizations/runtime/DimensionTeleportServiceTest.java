@@ -8,6 +8,7 @@ import io.github.empireage.civilizations.domain.Claim;
 import io.github.empireage.civilizations.service.progression.CapabilityPolicy;
 import io.github.empireage.civilizations.service.progression.TechnologyAccess;
 import org.bukkit.Bukkit;
+import io.github.empireage.civilizations.runtime.DimensionRitualItems.Ritual;
 import org.bukkit.HeightMap;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -263,11 +264,100 @@ class DimensionTeleportServiceTest {
         }
     }
 
+    @Test void offeringsAreRequiredForBothTargetsEvenWithTechnology() {
+        try (Harness h = new Harness()) {
+            when(h.rituals.has(h.player, Ritual.END)).thenReturn(false);
+            assertTrue(h.service.teleport(h.player, "end").message().contains("End Sigil"));
+            h.nether();
+            when(h.rituals.has(h.player, Ritual.NETHER)).thenReturn(false);
+            assertTrue(h.service.teleport(h.player, "nether").message().contains("Nether Ember"));
+            verify(h.rituals, never()).take(any(), any());
+        }
+    }
+
+    @Test void offeringIsRecheckedAfterWarmupAndAfterChunkLoading() {
+        try (Harness h = new Harness()) {
+            assertTrue(h.service.teleport(h.player, "end").success());
+            when(h.rituals.has(h.player, Ritual.END)).thenReturn(false);
+            h.advance(); h.service.tick();
+            assertNull(h.destination);
+            verify(h.rituals, never()).take(any(), any());
+            when(h.rituals.has(h.player, Ritual.END)).thenReturn(true);
+            assertTrue(h.service.teleport(h.player, "end").success());
+            when(h.world.getHighestBlockYAt(anyInt(), anyInt(), any(HeightMap.class))).thenAnswer(call -> {
+                when(h.rituals.has(h.player, Ritual.END)).thenReturn(false);
+                return 64;
+            });
+            h.advance(); h.service.tick();
+            assertNull(h.destination);
+            verify(h.rituals, never()).take(any(), any());
+        }
+    }
+
+    @Test void successfulTripConsumesOneOfferingOnlyAtTeleport() {
+        try (Harness h = new Harness()) {
+            assertTrue(h.service.teleport(h.player, "end").success());
+            h.service.tick();
+            verify(h.rituals, never()).take(any(), any());
+            h.advance(); h.service.tick(); h.service.tick();
+            assertNotNull(h.destination);
+            verify(h.rituals).take(h.player, Ritual.END);
+            verify(h.offering, never()).refund();
+        }
+    }
+
+    @Test void cancelledOrThrowingTeleportsRefundAndAllowRetry() {
+        try (Harness h = new Harness()) {
+            h.allowTeleport = false;
+            assertTrue(h.service.teleport(h.player, "end").success());
+            h.advance(); h.service.tick();
+            verify(h.offering).refund();
+            when(h.player.teleport(any(Location.class), eq(TeleportCause.COMMAND)))
+                .thenThrow(new IllegalStateException("Teleport callback failure"));
+            assertTrue(h.service.teleport(h.player, "end").success());
+            h.advance(); h.service.tick();
+            verify(h.offering, times(2)).refund();
+            assertTrue(h.service.teleport(h.player, "end").success());
+        }
+    }
+
+    @Test void failedDebitNeverTeleportsAndOverworldDoesNotRequireAnOffering() {
+        try (Harness h = new Harness()) {
+            when(h.rituals.take(h.player, Ritual.END)).thenReturn(null);
+            assertTrue(h.service.teleport(h.player, "end").success());
+            h.advance(); h.service.tick();
+            assertNull(h.destination);
+            clearInvocations(h.rituals);
+            when(h.player.getWorld()).thenReturn(h.world);
+            when(h.rituals.has(any(), any())).thenReturn(false);
+            when(h.technology.permitted(any(), anySet())).thenReturn(false);
+            assertTrue(h.service.teleport(h.player, "overworld").success());
+            h.advance(); h.service.tick();
+            assertSame(h.overworld, h.destination.getWorld());
+            verifyNoInteractions(h.rituals);
+        }
+    }
+
+    @Test void recipeHelpIsAvailableWithoutTechnologyOrOfferingAndDoesNotStartTravel() {
+        try (Harness h = new Harness()) {
+            when(h.technology.permitted(any(), anySet())).thenReturn(false);
+            when(h.rituals.has(any(), any())).thenReturn(false);
+            Command command = mock(Command.class); when(command.getName()).thenReturn("end");
+            h.service.onCommand(h.player, command, "end", new String[]{"recipe"});
+            verify(h.player).sendMessage(Ritual.END.recipeDescription());
+            h.advance(); h.service.tick();
+            verifyNoInteractions(h.rituals);
+            assertNull(h.destination);
+        }
+    }
+
     private record Position(int x, int y, int z) {}
     private static final class Harness implements AutoCloseable {
         final MockedStatic<Bukkit> bukkit = mockStatic(Bukkit.class);
         final JavaPlugin plugin = mock(JavaPlugin.class);
         final TechnologyAccess technology = mock(TechnologyAccess.class);
+        final DimensionRitualItems rituals = mock(DimensionRitualItems.class);
+        final DimensionRitualItems.Offering offering = mock(DimensionRitualItems.Offering.class);
         final StateCache cache = mock(StateCache.class);
         final StateSnapshot snapshot = mock(StateSnapshot.class);
         final World world = mock(World.class), overworld = mock(World.class);
@@ -287,6 +377,8 @@ class DimensionTeleportServiceTest {
             when(plugin.getLogger()).thenReturn(Logger.getLogger("dimension-test"));
             when(cache.ready()).thenReturn(true); when(cache.snapshot()).thenReturn(snapshot);
             when(technology.permitted(any(), anySet())).thenReturn(true);
+            when(rituals.has(any(), any())).thenReturn(true);
+            when(rituals.take(any(), any())).thenReturn(offering);
             bukkit.when(() -> Bukkit.getWorld("world")).thenReturn(overworld);
             bukkit.when(() -> Bukkit.getWorld("end")).thenReturn(world);
             bukkit.when(() -> Bukkit.getWorld("nether")).thenReturn(world);
@@ -323,7 +415,7 @@ class DimensionTeleportServiceTest {
             });
             Settings.Travel settings = new Settings.Travel(Duration.ofSeconds(5), Duration.ofSeconds(60), 0, 1,
                 destination("world"), destination("nether"), destination("end"));
-            service = new DimensionTeleportService(plugin, technology, cache, settings, clock, new Random(42));
+            service = new DimensionTeleportService(plugin, technology, cache, settings, clock, new Random(42), rituals);
         }
         void nether() { when(world.getEnvironment()).thenReturn(World.Environment.NETHER); when(world.getLogicalHeight()).thenReturn(128); floor = block(ground); }
         void advance() { clock.now = clock.now.plusSeconds(5); }

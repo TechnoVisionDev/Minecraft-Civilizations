@@ -7,12 +7,12 @@ description: Persistent civilizations, territory, technology, religion, property
 softdepend: [Vault, PlaceholderAPI, CoreProtect, WorldGuard]
 commands:
   nether:
-    description: Teleport to safe random wilderness below the Nether roof (requires Nether Expedition)
-    usage: /nether
+    description: Travel below the Nether roof with Nether Expedition and a Nether Ember
+    usage: /nether [recipe]
     permission: civilizations.use
   end:
-    description: Teleport to a safe random End island (requires End Expedition)
-    usage: /end
+    description: Travel to a safe End island with End Expedition and an End Sigil
+    usage: /end [recipe]
     permission: civilizations.use
   wild:
     description: Teleport to safe Overworld wilderness inside the world border (12-hour cooldown)

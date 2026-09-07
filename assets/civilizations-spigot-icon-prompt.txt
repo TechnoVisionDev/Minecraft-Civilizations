@@ -1,0 +1,8 @@
+Generated with the built-in image generation tool.
+
+Use case: logo-brand
+Asset type: square Spigot resource icon for the Minecraft Java plugin Civilizations.
+Primary request: Create a polished, memorable game-plugin emblem representing civilization-building and Greek mythology. A single bold ivory-stone Greek citadel/temple constructed from chunky Minecraft-inspired voxel blocks, on a small blocky grass-and-stone foundation, framed by a simple gold laurel wreath. Use a slightly isometric three-quarter view with a strong unified silhouette. The temple should dominate, with only three or four substantial columns and a stepped triangular roof.
+Style/medium: premium stylized voxel game icon, crisp geometric forms, restrained dimensional shading, beautifully finished edges. Rich dark background and luminous stone and gold. Clean, purposeful detail, readable at thumbnail scale.
+Composition/framing: 1:1 square, centered emblem fills about 80 percent of frame, comfortable safe margins. Deep midnight-blue background with a subtle soft halo behind the citadel. Ivory marble, warm gold, small emerald-green grass accents. Directional warm light from upper left.
+Constraints: one icon only, full-bleed square image, no mockup, no lettering, no words, no watermark, no UI, no photorealism, no tiny buildings, no crowded landscape, no fine decorative clutter.

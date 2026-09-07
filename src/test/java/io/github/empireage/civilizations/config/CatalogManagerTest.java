@@ -69,6 +69,35 @@ class CatalogManagerTest {
         assertTrue(Files.readString(dataDirectory.resolve("technologies.yml")).contains("catalog-version: 3"));
     }
 
+    @Test
+    void demeterUpgradePreservesOtherReligionSettingsAndBacksUpOriginal() throws Exception {
+        String original = Files.readString(Path.of("src/main/resources/religion.yml"))
+            .replace("catalog-version: 2", "catalog-version: 1")
+            .replace("offering: BREAD", "offering: WHEAT")
+            .replace("cooldown: 4h", "cooldown: 8h")
+            .replace("offering: COD", "offering: SALMON");
+        Files.writeString(dataDirectory.resolve("religion.yml"), original);
+        CatalogManager catalogs = new CatalogManager(plugin());
+        catalogs.load();
+        assertEquals(org.bukkit.Material.BREAD, catalogs.religion().get("demeter").offering());
+        assertEquals(org.bukkit.Material.SALMON, catalogs.religion().get("poseidon").offering());
+        assertEquals(java.time.Duration.ofHours(8), catalogs.religion().cooldown());
+        assertEquals(original, Files.readString(dataDirectory.resolve("religion.yml.pre-v2.bak")));
+        catalogs.load();
+        assertTrue(Files.notExists(dataDirectory.resolve("religion.yml.pre-v2.bak.1")));
+    }
+
+    @Test
+    void religionUpgradePreservesAnExplicitlyCustomizedDemeterOffering() throws Exception {
+        String original = Files.readString(Path.of("src/main/resources/religion.yml"))
+            .replace("catalog-version: 2", "catalog-version: 1")
+            .replace("offering: BREAD", "offering: APPLE");
+        Files.writeString(dataDirectory.resolve("religion.yml"), original);
+        CatalogManager catalogs = new CatalogManager(plugin());
+        catalogs.load();
+        assertEquals(org.bukkit.Material.APPLE, catalogs.religion().get("demeter").offering());
+    }
+
     private JavaPlugin plugin() throws Exception {
         JavaPlugin plugin = mock(JavaPlugin.class);
         when(plugin.getDataFolder()).thenReturn(dataDirectory.toFile());

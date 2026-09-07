@@ -449,8 +449,8 @@ Currency-disabled or unavailable economy services do not collect taxes or trigge
 | --- | --- | --- | --- |
 | First-ever join | Safe random unclaimed Overworld ground | Automatic after territory readiness | Free; does not use `/wild` cooldown |
 | `/wild` | Safe random unclaimed Overworld ground | `civilizations.wild`, granted by default | 12 hours after successful manual use |
-| `/nether` | Random safe Nether ground below its roof | Nether Expedition technology | 5-second warmup; shared 60-second dimension cooldown |
-| `/end` | Random safe End island ground | End Expedition technology | Same dimension warmup/cooldown |
+| `/nether` | Random safe Nether ground below its roof | Nether Expedition technology + 1 Nether Ember | 5-second warmup; shared 60-second dimension cooldown |
+| `/end` | Random safe End island ground | End Expedition technology + 1 End Sigil | Same dimension warmup/cooldown |
 | `/civ teleport nether` / `end` | Same as the shortcuts | Same as the shortcuts | Same shared dimension cooldown |
 | `/civ teleport overworld` | Configured safe Overworld return point | No expedition technology | Same dimension warmup/cooldown |
 | `/civ home` | Civilization home in its capital | Membership and enabled home travel | Separate 5-second warmup / 60-second home cooldown |
@@ -460,6 +460,17 @@ Dimension technology checks still apply in `CRAFT_ONLY` mode. `DISABLED` technol
 Random travel uses the destination world's live border. `/wild` requires safe surface ground with two empty blocks above it; dimension travel requires a supported clear 3×3 patch. Nether searches reject the roof, bedrock floors, and hazardous landings. End searches require End stone ground, rejecting void, obsidian platforms, and obstructed landing patches.
 
 A search tries at most **64 random candidates** and times out after **two minutes** (after the dimension warmup where applicable). Work is spread over server ticks. If no suitable land is found, you stay where you are and can retry without consuming a cooldown. Searches can take longer on unexplored terrain.
+
+Both shortcut and `/civ teleport` dimension travel require a genuine custom ritual offering in your inventory or offhand, even when technology enforcement is disabled or bypassed. One is consumed per successful trip, including travel within the same dimension. Missing or removed offerings block travel. Cancelled, failed, or timed-out travel preserves the offering; Overworld returns require none.
+
+Craft these **shapeless recipes** at a crafting table (one item per occupied slot; each recipe yields one offering). They are automatically added to the recipe book; `/nether recipe` and `/end recipe` also list ingredients.
+
+| Offering | Ingredients | Gameplay encouraged |
+| --- | --- | --- |
+| Nether Ember | 2 obsidian, 1 amethyst shard, 1 honeycomb, 1 rabbit foot, 1 gunpowder, 1 gold ingot | Mining, geode exploration, beekeeping, rabbit hunting/breeding, and hostile mobs; all ingredients obtainable before entering the Nether |
+| End Sigil | 2 eyes of ender, 1 ghast tear, 1 blaze rod, 1 prismarine crystals, 1 phantom membrane, 1 diamond, 1 amethyst shard | Nether expeditions, ocean exploration, night combat, and deep mining; no End-only ingredients |
+
+Renaming a vanilla item cannot make an offering. Ritual items cannot be used as ordinary crafting ingredients.
 
 Moving or taking damage cancels pending dimension travel. Successful travel clears falling momentum. The dimension cooldown is separate from `/wild`; using `/nether` does not consume a 12-hour wilderness use.
 
@@ -673,7 +684,7 @@ Religion is available through `/religion`, independent of civilization leadershi
 | --- | --- | --- |
 | Zeus (`zeus`) | Gold ingot | Speed I + Jump Boost II |
 | Poseidon (`poseidon`) | Cod | Water Breathing I + Dolphin's Grace I |
-| Demeter (`demeter`) | Wheat | Regeneration I + Health Boost I |
+| Demeter (`demeter`) | Bread | Regeneration I + Health Boost I |
 | Ares (`ares`) | Iron ingot | Strength I + Resistance I |
 | Athena (`athena`) | Book | Haste I + Luck I |
 | Artemis (`artemis`) | Feather | Speed I + Night Vision I |
@@ -952,7 +963,7 @@ The **12-hour `/wild` cooldown**, random-search bounds, and **weekly tax period*
 
 `/civ admin reload` reloads `messages.yml` and validates `config.yml`. It does **not** replace the live database, gameplay, integration, scheduler, or catalog configuration. Fully restart after changing those settings. Do not use a plugin manager or `/reload` to replace a running Civilizations instance.
 
-Catalogs have `catalog-version` markers. When a file’s version differs from the shipped version, startup backs up that file as a `.pre-v*.bak` file and restores the packaged catalog; a legacy work-order format also has an upgrade path. Review and reapply compatible custom balancing after that upgrade. Do not simply bump the version marker to bypass a required format conversion.
+Catalogs have `catalog-version` markers. When a file’s version differs from the shipped version, startup backs up that file as a `.pre-v*.bak` file and restores the packaged catalog (the religion v1→v2 upgrade instead changes Demeter’s default wheat offering to bread while preserving other settings); a legacy work-order format also has an upgrade path. Review and reapply compatible custom balancing after that upgrade. Do not simply bump the version marker to bypass a required format conversion.
 
 Resource keys, technology keys, recipe versions, and world UUIDs participate in persistent identity. Preserve deployed keys and the matching worlds. Renaming/removing a used key requires an intentional data migration, not just a cosmetic YAML edit. Display names and balancing also need a restart and a review of their effect on existing items/orders.
 

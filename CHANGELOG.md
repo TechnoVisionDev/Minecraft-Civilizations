@@ -15,6 +15,9 @@ All notable release changes are documented here. Database migrations are forward
 
 ### Changed
 
+- Demeter accepts bread instead of wheat. Existing default wheat offerings migrate with a backup while preserving other religion settings.
+- Nether and End travel now require a craftable Nether Ember or End Sigil alongside expedition research, consuming one only on successful travel. Recipe-book discovery and `/nether recipe` / `/end recipe` explain the exploration-focused ingredients.
+
 - Nether/End dimension travel now finds random safe unclaimed destinations inside each world border, with supported End island landings and Nether roof/hazard rejection. Added `/nether` and `/end` shortcuts; expedition requirements and the existing dimension warmup/shared cooldown still apply.
 
 - `/civ stockpile` now opens a read-only resource GUI with stack counts, exact hover totals, tier and recipe details, pagination, and refresh. The history command remains available.

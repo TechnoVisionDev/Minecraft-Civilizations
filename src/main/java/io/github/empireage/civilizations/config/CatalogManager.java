@@ -13,7 +13,7 @@ public final class CatalogManager {
     private static final int RESOURCE_CATALOG_VERSION = 2;
     private static final int TECHNOLOGY_CATALOG_VERSION = 3;
     private static final int WORK_ORDER_CATALOG_VERSION = 3;
-    private static final int RELIGION_CATALOG_VERSION = 1;
+    private static final int RELIGION_CATALOG_VERSION = 2;
     private final JavaPlugin plugin;
     private final AtomicReference<ResourceCatalog> resources = new AtomicReference<>();
     private final AtomicReference<TechnologyCatalog> technologies = new AtomicReference<>();
@@ -81,7 +81,8 @@ public final class CatalogManager {
             case "religion.yml" -> RELIGION_CATALOG_VERSION;
             default -> throw new IllegalArgumentException("Unknown catalog: " + name);
         };
-        int installed = YamlConfiguration.loadConfiguration(file).getInt("catalog-version", 0);
+        YamlConfiguration yaml = YamlConfiguration.loadConfiguration(file);
+        int installed = yaml.getInt("catalog-version", 0);
         if (installed == current) return;
         File backup = nextBackup(file, ".pre-v" + current + ".bak");
         try {
@@ -90,6 +91,18 @@ public final class CatalogManager {
             throw new IllegalStateException(name + " must be upgraded from catalog version " + installed + " to "
                 + current + ", but it could not be backed up to " + backup.getName() + ": "
                 + failure.getMessage(), failure);
+        }
+        if (name.equals("religion.yml") && installed <= 1 && yaml.isConfigurationSection("gods")) {
+            if ("WHEAT".equalsIgnoreCase(yaml.getString("gods.demeter.offering")))
+                yaml.set("gods.demeter.offering", "BREAD");
+            yaml.set("catalog-version", current);
+            try {
+                yaml.save(file);
+            } catch (IOException failure) {
+                throw new IllegalStateException("Could not upgrade religion.yml; original saved as " + backup.getName(), failure);
+            }
+            plugin.getLogger().info("Upgraded religion.yml to version " + current + "; original saved as " + backup.getName() + ".");
+            return;
         }
         plugin.getLogger().warning("Outdated " + name + " catalog version " + installed + " detected. Backed it up as "
             + backup.getName() + " and restored catalog version " + current + ".");

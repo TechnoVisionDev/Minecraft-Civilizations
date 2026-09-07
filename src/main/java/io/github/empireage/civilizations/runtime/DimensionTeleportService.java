@@ -22,6 +22,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.HandlerList;
+import io.github.empireage.civilizations.runtime.DimensionRitualItems.Ritual;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -58,6 +60,7 @@ public final class DimensionTeleportService implements CommandExecutor, TabCompl
     private final Settings.Travel settings;
     private final Clock clock;
     private final RandomGenerator random;
+    private final DimensionRitualItems rituals;
     // Main-thread round-robin queue: at most one candidate per two ticks across all players.
     private final Map<UUID, Pending> pending = new LinkedHashMap<>();
     private final Map<UUID, Instant> cooldowns = new ConcurrentHashMap<>();
@@ -70,28 +73,43 @@ public final class DimensionTeleportService implements CommandExecutor, TabCompl
 
     DimensionTeleportService(JavaPlugin plugin, TechnologyAccess technology, StateCache cache,
                              Settings.Travel settings, Clock clock, RandomGenerator random) {
+        this(plugin, technology, cache, settings, clock, random, new DimensionRitualItems(plugin));
+    }
+
+    DimensionTeleportService(JavaPlugin plugin, TechnologyAccess technology, StateCache cache,
+                             Settings.Travel settings, Clock clock, RandomGenerator random, DimensionRitualItems rituals) {
         this.plugin = java.util.Objects.requireNonNull(plugin, "plugin");
         this.technology = java.util.Objects.requireNonNull(technology, "technology");
         this.cache = java.util.Objects.requireNonNull(cache, "cache");
         this.settings = java.util.Objects.requireNonNull(settings, "settings");
         this.clock = java.util.Objects.requireNonNull(clock, "clock");
         this.random = java.util.Objects.requireNonNull(random, "random");
+        this.rituals = java.util.Objects.requireNonNull(rituals, "rituals");
     }
 
     public void start() {
-        if (task == null && !closed) task = Bukkit.getScheduler().runTaskTimer(plugin, this::tick, 1L, 2L);
+        if (task == null && !closed) {
+            rituals.registerRecipes();
+            plugin.getServer().getPluginManager().registerEvents(rituals, plugin);
+            task = Bukkit.getScheduler().runTaskTimer(plugin, this::tick, 1L, 2L);
+        }
     }
 
     @Override public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player player)) { sender.sendMessage("Only players can use dimension travel."); return true; }
         if (!player.hasPermission("civilizations.use")) { player.sendMessage("You do not have permission to use dimension travel."); return true; }
-        if (args.length != 0) { player.sendMessage("Usage: /" + command.getName()); return true; }
+        Target target = Target.parse(command.getName());
+        if (args.length == 1 && args[0].equalsIgnoreCase("recipe") && target != null && target.ritual != null) {
+            player.sendMessage(target.ritual.recipeDescription());
+            return true;
+        }
+        if (args.length != 0) { player.sendMessage("Usage: /" + command.getName() + " [recipe]"); return true; }
         player.sendMessage(teleport(player, command.getName()).message());
         return true;
     }
 
     @Override public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        return List.of();
+        return args.length == 1 && "recipe".startsWith(args[0].toLowerCase(Locale.ROOT)) ? List.of("recipe") : List.of();
     }
 
     public OperationResult teleport(Player player, String requestedTarget) {
@@ -188,7 +206,18 @@ public final class DimensionTeleportService implements CommandExecutor, TabCompl
             }
             if (pending.get(player.getUniqueId()) != value) return;
             value.completing = true;
-            if (player.teleport(destination, TeleportCause.COMMAND)) {
+            DimensionRitualItems.Offering offering = value.target.ritual == null ? null : rituals.take(player, value.target.ritual);
+            if (value.target.ritual != null && offering == null) {
+                cancel(player, missingOffering(value.target));
+                return;
+            }
+            boolean teleported = false;
+            try {
+                teleported = player.teleport(destination, TeleportCause.COMMAND);
+            } finally {
+                if (!teleported && offering != null) offering.refund();
+            }
+            if (teleported) {
                 cooldowns.put(player.getUniqueId(), clock.instant().plus(settings.cooldown()));
                 player.setFallDistance(0);
                 player.setVelocity(new Vector());
@@ -249,10 +278,16 @@ public final class DimensionTeleportService implements CommandExecutor, TabCompl
     }
 
     private OperationResult authorize(Player player, Target target) {
-        if (target.capability == null || technology.permitted(player, Set.of(target.capability))) {
-            return OperationResult.ok("Dimension travel authorized.");
-        }
-        return OperationResult.denied("Your civilization has not unlocked " + target.technologyName + ".");
+        if (target.capability != null && !technology.permitted(player, Set.of(target.capability)))
+            return OperationResult.denied("Your civilization has not unlocked " + target.technologyName + ".");
+        if (target.ritual != null && !rituals.has(player, target.ritual))
+            return OperationResult.denied(missingOffering(target));
+        return OperationResult.ok("Dimension travel authorized.");
+    }
+
+    private String missingOffering(Target target) {
+        return "You need a " + target.ritual.displayName() + " in your inventory. See /"
+            + target.label + " recipe. One offering is consumed per successful trip.";
     }
 
     private OperationResult validateReturnRoute(Target target) {
@@ -327,26 +362,33 @@ public final class DimensionTeleportService implements CommandExecutor, TabCompl
     @Override
     public void close() {
         closed = true;
-        if (task != null) task.cancel();
+        if (task != null) {
+            task.cancel();
+            rituals.unregisterRecipes();
+            HandlerList.unregisterAll(rituals);
+            task = null;
+        }
         pending.clear();
         cooldowns.clear();
     }
 
     private enum Target {
-        OVERWORLD("overworld", World.Environment.NORMAL, null, null),
-        NETHER("nether", World.Environment.NETHER, CapabilityPolicy.TELEPORT_NETHER, "Nether Expedition"),
-        END("end", World.Environment.THE_END, CapabilityPolicy.TELEPORT_END, "End Expedition");
+        OVERWORLD("overworld", World.Environment.NORMAL, null, null, null),
+        NETHER("nether", World.Environment.NETHER, CapabilityPolicy.TELEPORT_NETHER, "Nether Expedition", Ritual.NETHER),
+        END("end", World.Environment.THE_END, CapabilityPolicy.TELEPORT_END, "End Expedition", Ritual.END);
 
         private final String label;
         private final World.Environment environment;
         private final String capability;
         private final String technologyName;
+        private final Ritual ritual;
 
-        Target(String label, World.Environment environment, String capability, String technologyName) {
+        Target(String label, World.Environment environment, String capability, String technologyName, Ritual ritual) {
             this.label = label;
             this.environment = environment;
             this.capability = capability;
             this.technologyName = technologyName;
+            this.ritual = ritual;
         }
 
         static Target parse(String value) {

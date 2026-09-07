@@ -109,7 +109,7 @@ Open the pantheon, choose a god, and offer the stack in your hand for a chance a
 [LIST]
 [*][B]Zeus:[/B] Gold ingots — Speed I and Jump Boost II.
 [*][B]Poseidon:[/B] Cod — Water Breathing I and Dolphin's Grace I.
-[*][B]Demeter:[/B] Wheat — Regeneration I and Health Boost I.
+[*][B]Demeter:[/B] Bread — Regeneration I and Health Boost I.
 [*][B]Ares:[/B] Iron ingots — Strength I and Resistance I.
 [*][B]Athena:[/B] Books — Haste I and Luck I.
 [*][B]Artemis:[/B] Feathers — Speed I and Night Vision I.
@@ -142,7 +142,7 @@ Campaigns end when their scheduled window expires or both leaders accept peace. 
 [*]Paginated help, topic shortcuts, and command tab completion.
 [*]Automatic first-join placement on safe, unclaimed Overworld ground.
 [*]/wild for another wilderness destination, with a 12-hour cooldown after a successful manual use.
-[*]Civilization home travel and research-gated /nether and /end commands.
+[*]Civilization home travel and /nether and /end commands requiring expedition research and crafted ritual offerings.
 [*]Safe random dimension destinations inside the target world's border.
 [*]Global, local, and civilization chat; local range defaults to 100 blocks.
 [*]Confirmation menus for costly or destructive gameplay actions.

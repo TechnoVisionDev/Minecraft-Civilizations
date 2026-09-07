@@ -18,7 +18,7 @@ class ReligionCatalogTest {
         assertEquals(Duration.ofMinutes(30), catalog.buffDuration());
         assertEquals(6, catalog.gods().size());
         assertEquals(Material.COD, catalog.get("poseidon").offering());
-        assertEquals(Material.WHEAT, catalog.get("DEMETER").offering());
+        assertEquals(Material.BREAD, catalog.get("DEMETER").offering());
         assertFalse(catalog.gods().values().stream().anyMatch(god -> god.buffs().isEmpty()));
     }
 }
