@@ -279,7 +279,7 @@ public final class CivCommand implements CommandExecutor, TabCompleter {
                 "&e/civ sethome&7 and &e/civ home &8— &7set the civic home and teleport there.",
                 "&e/civ teleport <overworld | nether | end> &8— &7dimension travel; Overworld returns to its arrival point.",
                 "&e/nether&7 and &e/end &8— &7safe dimension wilderness; expedition tech and a ritual offering required.",
-                "&e/nether recipe&7 and &e/end recipe &8— &7craft the offering consumed for each successful trip.",
+                "&e/civ items &8→ &eOther Items &8— &7recipes for dimension travel offerings.",
                 "&e/wild &8— &7random safe Overworld wilderness; 12-hour cooldown, free first-join placement.",
                 "&7Costly territory changes open a confirmation menu and recheck conditions when accepted."),
             List.of(
@@ -292,7 +292,7 @@ public final class CivCommand implements CommandExecutor, TabCompleter {
                 "&e/civ plot flags [flag] [on | off] &8— &7inspect or edit interaction permissions."),
             List.of(
                 "&eResources tutorial &8— &7Gather civic materials, refine them, then contribute to shared goals.",
-                "&e/civ items &8— &7browse every custom item by tier; click an item for its recipe.",
+                "&e/civ items &8— &7browse civic tiers and other items; click an item for its recipe.",
                 "&e/civ refine &8— &7convert eligible materials using the configured refining rules.",
                 "&e/civ deposit <hand | all> &8— &7move authentic civic items into the stockpile.",
                 "&e/civ stockpile [history [page]] &8— &7open the stockpile GUI or inspect the contribution ledger.",

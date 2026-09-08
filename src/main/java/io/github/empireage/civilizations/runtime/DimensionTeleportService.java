@@ -98,18 +98,13 @@ public final class DimensionTeleportService implements CommandExecutor, TabCompl
     @Override public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!(sender instanceof Player player)) { sender.sendMessage("Only players can use dimension travel."); return true; }
         if (!player.hasPermission("civilizations.use")) { player.sendMessage("You do not have permission to use dimension travel."); return true; }
-        Target target = Target.parse(command.getName());
-        if (args.length == 1 && args[0].equalsIgnoreCase("recipe") && target != null && target.ritual != null) {
-            player.sendMessage(target.ritual.recipeDescription());
-            return true;
-        }
-        if (args.length != 0) { player.sendMessage("Usage: /" + command.getName() + " [recipe]"); return true; }
+        if (args.length != 0) { player.sendMessage("Usage: /" + command.getName()); return true; }
         player.sendMessage(teleport(player, command.getName()).message());
         return true;
     }
 
     @Override public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        return args.length == 1 && "recipe".startsWith(args[0].toLowerCase(Locale.ROOT)) ? List.of("recipe") : List.of();
+        return List.of();
     }
 
     public OperationResult teleport(Player player, String requestedTarget) {
@@ -286,8 +281,8 @@ public final class DimensionTeleportService implements CommandExecutor, TabCompl
     }
 
     private String missingOffering(Target target) {
-        return "You need a " + target.ritual.displayName() + " in your inventory. See /"
-            + target.label + " recipe. One offering is consumed per successful trip.";
+        return "You need a " + target.ritual.displayName() + " in your inventory. See /civ items > Other Items. "
+            + "One offering is consumed per successful trip.";
     }
 
     private OperationResult validateReturnRoute(Target target) {

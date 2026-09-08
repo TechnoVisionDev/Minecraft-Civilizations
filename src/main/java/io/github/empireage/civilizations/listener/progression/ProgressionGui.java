@@ -9,6 +9,9 @@ import io.github.empireage.civilizations.domain.Member;
 import io.github.empireage.civilizations.domain.ResearchEntry;
 import io.github.empireage.civilizations.domain.ResourceKey;
 import io.github.empireage.civilizations.domain.TechnologyDefinition;
+import io.github.empireage.civilizations.runtime.DimensionRitualItems;
+import io.github.empireage.civilizations.runtime.DimensionRitualItems.Ritual;
+import io.github.empireage.civilizations.service.war.WarItems;
 import io.github.empireage.civilizations.service.progression.CivicItemService;
 import io.github.empireage.civilizations.service.progression.ResearchService;
 import io.github.empireage.civilizations.service.progression.WorkOrderService;
@@ -87,6 +90,8 @@ public final class ProgressionGui implements Listener {
     private final TechnologyCatalog technologies;
     private final ResourceCatalog resources;
     private final CivicItemService civicItems;
+    private final DimensionRitualItems ritualItems;
+    private final WarItems warItems;
     private final ResearchService research;
     private final WorkOrderService workOrders;
 
@@ -98,6 +103,8 @@ public final class ProgressionGui implements Listener {
         this.technologies = Objects.requireNonNull(technologies, "technologies");
         this.resources = Objects.requireNonNull(resources, "resources");
         this.civicItems = Objects.requireNonNull(civicItems, "civicItems");
+        this.ritualItems = new DimensionRitualItems(plugin);
+        this.warItems = new WarItems(plugin);
         this.research = Objects.requireNonNull(research, "research");
         this.workOrders = Objects.requireNonNull(workOrders, "workOrders");
     }
@@ -220,7 +227,7 @@ public final class ProgressionGui implements Listener {
 
     public void openCustomItems(Player player) {
         MenuHolder holder = new MenuHolder(MenuType.ITEM_TIERS, -1);
-        Inventory menu = menu(holder, 27, "Civic Items by Tier");
+        Inventory menu = menu(holder, 36, "Civilization Items");
         int[] slots = {11, 13, 15};
         Material[] icons = {Material.COPPER_INGOT, Material.IRON_INGOT, Material.GOLD_INGOT};
         for (int tier = 1; tier <= 3; tier++) {
@@ -231,6 +238,9 @@ public final class ProgressionGui implements Listener {
                 "&7" + entries.size() + " custom civic items", "&eClick to browse recipes.")));
             holder.actions.put(slots[tier - 1], Integer.toString(tier));
         }
+        menu.setItem(22, item(Material.ENDER_EYE, "&dOther Items", List.of(
+            "&7Travel offerings, War Charter, and tutorial book.", "&eClick to browse recipes and item information.")));
+        holder.actions.put(22, "other");
         player.openInventory(menu);
     }
 
@@ -334,8 +344,78 @@ public final class ProgressionGui implements Listener {
             menu.setItem(slot, display);
             holder.actions.put(slot, definition.key().serialized());
         }
-        menu.setItem(31, item(Material.ARROW, "&eBack to tiers", List.of()));
+        menu.setItem(31, item(Material.ARROW, "&eBack to items", List.of()));
         holder.actions.put(31, "back");
+        player.openInventory(menu);
+    }
+
+    private void openOtherItems(Player player) {
+        MenuHolder holder = new MenuHolder(MenuType.OTHER_ITEMS, -1);
+        Inventory menu = menu(holder, 36, "Civilization Items — Other Items");
+        for (Ritual ritual : Ritual.values()) {
+            int slot = CONTENT_SLOTS[ritual.ordinal()];
+            ItemStack display = ritualItems.create(ritual);
+            ItemMeta meta = display.getItemMeta();
+            List<String> lore = new ArrayList<>(meta.getLore());
+            lore.add(color("&eClick to view the crafting recipe."));
+            meta.setLore(lore);
+            display.setItemMeta(meta);
+            menu.setItem(slot, display);
+            holder.actions.put(slot, ritual.name());
+        }
+        ItemStack charter = warItems.charter();
+        ItemMeta charterMeta = charter.getItemMeta();
+        List<String> charterLore = new ArrayList<>(charterMeta.getLore());
+        charterLore.add(color("&eClick to view the crafting recipe."));
+        charterMeta.setLore(charterLore);
+        charter.setItemMeta(charterMeta);
+        menu.setItem(12, charter);
+        holder.actions.put(12, "charter");
+        menu.setItem(13, item(Material.WRITTEN_BOOK, "&6Civilizations Tutorial", List.of(
+            "&7A guide to getting started.", "&eClick to see how to obtain a copy.")));
+        holder.actions.put(13, "tutorial");
+        menu.setItem(31, item(Material.ARROW, "&eBack to items", List.of()));
+        holder.actions.put(31, "back");
+        player.openInventory(menu);
+    }
+
+    private void openOtherItem(Player player, String action) {
+        if (!action.equals("charter") && !action.equals("tutorial")) {
+            openRitualRecipe(player, Ritual.valueOf(action));
+            return;
+        }
+        MenuHolder holder = new MenuHolder(MenuType.OTHER_ITEM_DETAILS, -1);
+        Inventory menu = menu(holder, 45, action.equals("charter")
+            ? "Recipe — War Charter" : "Item — Civilizations Tutorial");
+        if (action.equals("charter")) {
+            List<Material> ingredients = WarItems.charterIngredients();
+            for (int index = 0; index < ingredients.size(); index++) {
+                menu.setItem(RECIPE_GRID[index], new ItemStack(ingredients.get(index)));
+            }
+            menu.setItem(23, item(Material.CRAFTING_TABLE, "&7Craft", List.of(
+                "&7Shaped recipe", "&7Arrange ingredients exactly as shown.", "&7Makes one War Charter.")));
+            menu.setItem(25, warItems.charter());
+        } else {
+            menu.setItem(22, item(Material.WRITTEN_BOOK, "&6Civilizations Tutorial", List.of(
+                "&7Given to new players on joining.", "&7Get another copy with &e/civ tutorial&7.",
+                "&7One copy per 24 hours, including the welcome copy.", "&8This item has no crafting recipe.")));
+        }
+        menu.setItem(40, item(Material.ARROW, "&eBack to Other Items", List.of()));
+        holder.actions.put(40, "back");
+        player.openInventory(menu);
+    }
+
+    private void openRitualRecipe(Player player, Ritual ritual) {
+        MenuHolder holder = new MenuHolder(MenuType.OTHER_ITEM_DETAILS, -1);
+        Inventory menu = menu(holder, 45, "Recipe — " + ritual.displayName());
+        for (int index = 0; index < ritual.ingredients().size(); index++) {
+            menu.setItem(RECIPE_GRID[index], new ItemStack(ritual.ingredients().get(index)));
+        }
+        menu.setItem(23, item(Material.CRAFTING_TABLE, "&7Craft", List.of(
+            "&7Shapeless recipe", "&7One ingredient per occupied slot.", "&7Makes one offering.")));
+        menu.setItem(25, ritualItems.create(ritual));
+        menu.setItem(40, item(Material.ARROW, "&eBack to Other Items", List.of()));
+        holder.actions.put(40, "back");
         player.openInventory(menu);
     }
 
@@ -375,7 +455,15 @@ public final class ProgressionGui implements Listener {
                 else startResearch(player, holder.civilizationId, action, holder.context);
             }
             case WORK_ORDERS -> submitOrder(player, Long.parseLong(action));
-            case ITEM_TIERS -> openItemTier(player, Integer.parseInt(action));
+            case ITEM_TIERS -> {
+                if (action.equals("other")) openOtherItems(player);
+                else openItemTier(player, Integer.parseInt(action));
+            }
+            case OTHER_ITEMS -> {
+                if (action.equals("back")) openCustomItems(player);
+                else openOtherItem(player, action);
+            }
+            case OTHER_ITEM_DETAILS -> openOtherItems(player);
             case ITEM_LIST -> {
                 if (action.equals("back")) openCustomItems(player); else openRecipe(player, ResourceKey.parse(action));
             }
@@ -541,7 +629,7 @@ public final class ProgressionGui implements Listener {
         return cursor.getMessage() == null ? cursor.getClass().getSimpleName() : cursor.getMessage();
     }
 
-    private enum MenuType { TECH_AGES, TECHNOLOGIES, WORK_ORDERS, STOCKPILE, ITEM_TIERS, ITEM_LIST, ITEM_RECIPE }
+    private enum MenuType { TECH_AGES, TECHNOLOGIES, WORK_ORDERS, STOCKPILE, ITEM_TIERS, ITEM_LIST, ITEM_RECIPE, OTHER_ITEMS, OTHER_ITEM_DETAILS }
 
     private record AgeSection(String key, String name, Material icon, int slot) {}
 

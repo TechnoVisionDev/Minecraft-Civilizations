@@ -141,8 +141,8 @@ public final class TutorialBookService implements Listener {
                 /nether and /end
                 Need expedition tech
                 and a ritual offering.
-                /nether recipe
-                /end recipe"""),
+                /civ items
+                Choose Other Items."""),
             page("5. Craft resources", """
                 /civ items
                 Browse custom items.

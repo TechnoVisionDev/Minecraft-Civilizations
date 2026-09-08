@@ -32,6 +32,7 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.List;
 import java.util.Random;
 import java.util.Set;
 import java.util.UUID;
@@ -338,13 +339,15 @@ class DimensionTeleportServiceTest {
         }
     }
 
-    @Test void recipeHelpIsAvailableWithoutTechnologyOrOfferingAndDoesNotStartTravel() {
+    @Test void removedRecipeCommandsShowUsageWithoutStartingTravelOrTabSuggestions() {
         try (Harness h = new Harness()) {
-            when(h.technology.permitted(any(), anySet())).thenReturn(false);
-            when(h.rituals.has(any(), any())).thenReturn(false);
-            Command command = mock(Command.class); when(command.getName()).thenReturn("end");
-            h.service.onCommand(h.player, command, "end", new String[]{"recipe"});
-            verify(h.player).sendMessage(Ritual.END.recipeDescription());
+            for (String name : List.of("nether", "end")) {
+                Command command = mock(Command.class); when(command.getName()).thenReturn(name);
+                h.service.onCommand(h.player, command, name, new String[]{"recipe"});
+                verify(h.player).sendMessage("Usage: /" + name);
+                assertTrue(h.service.onTabComplete(h.player, command, name, new String[]{""}).isEmpty());
+                assertTrue(h.service.onTabComplete(h.player, command, name, new String[]{"r"}).isEmpty());
+            }
             h.advance(); h.service.tick();
             verifyNoInteractions(h.rituals);
             assertNull(h.destination);

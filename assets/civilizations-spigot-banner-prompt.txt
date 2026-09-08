@@ -1,0 +1,20 @@
+Generated with the built-in image generation tool.
+
+Use case: ads-marketing
+Asset type: Wide hero banner for the Spigot resource description of the Minecraft Java plugin Civilizations.
+Create a finished premium illustrated banner, landscape 3:1 aspect ratio, ideally 2400 x 800 pixels. All important text and subjects safely inside the frame.
+Style: richly detailed Minecraft-inspired voxel 3D key art, block-built terrain, square-headed blocky player characters, crisp pixel materials, cinematic warm gold light against deep navy blue. Brand identity: ancient Greek white-stone temple architecture, gold accents and subtle golden laurel decoration, matching a navy-and-gold civilization emblem.
+Composition: a single cohesive panoramic world with clearly readable gameplay scenes, not boxed cards. Upper 30 percent is a quiet deep-navy sky reserved for the enormous centered title. Below, an elevated white-stone and gold Greek capital stands at the heart of a thriving block-built nation. Across the panorama depict six real gameplay pillars:
+1. Nation building and connected land: capital, blue-and-gold flags, block-built settlement and cultivated fields, tasteful faint square plot boundaries on some terrain.
+2. Private plots: distinct small player houses with fenced yards, a citizen building their home.
+3. Crafting and trade: a compact workshop with a blocky smith, furnace, timber bundles, masonry, ingots and shared storage chests; modest gold and emerald resource-trade cues.
+4. Research: a scholar at an open luminous book, subtle branching technology nodes using simple tool and gear symbols, progression from basic tools toward advanced equipment. Keep this as supporting visual language.
+5. Greek religion: a white-columned shrine with a player offering gold, divine lightning in the distant sky and a gentle blessing glow. No giant physical gods or monsters.
+6. Scheduled border warfare: a small readable group of blocky armored players with swords, shields and bows facing opposing banner colors at a stone border wall. Dramatic but non-graphic. No cannons, guns, siege machines or claimed territory conquest.
+Balance peaceful nation-building and progression with the combat scene. Keep foreground silhouettes readable at web size; atmosphere should feel grand, inviting and adventurous. Professionally composed with clear depth and visual hierarchy.
+Text, verbatim:
+Large main title at top: "CIVILIZATIONS"
+Directly beneath in smaller clean readable ivory type: "Found a nation. Build its future. Defend its borders."
+Along the bottom, on one uncluttered deep navy strip, evenly spaced ivory/gold feature labels separated by small gold dots: "NATIONS & LAND" • "PRIVATE PLOTS" • "CRAFT & TRADE" • "RESEARCH" • "GREEK GODS" • "SCHEDULED WARS"
+Title typography: bold monumental gold beveled lettering with a subtle block-cut character and strong contrast, exceptionally legible. Footer typography: simple bold clear sans serif, legible on a Spigot description page.
+No additional text, no version numbers, no official Minecraft or Spigot logo, no watermark, no UI screenshots. Do not imply automatic building generation; the buildings represent what players construct. Deliver a polished complete banner, not a mockup on a screen.

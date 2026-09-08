@@ -466,7 +466,7 @@ A search tries at most **64 random candidates** and times out after **two minute
 
 Both shortcut and `/civ teleport` dimension travel require a genuine custom ritual offering in your inventory or offhand, even when technology enforcement is disabled or bypassed. One is consumed per successful trip, including travel within the same dimension. Missing or removed offerings block travel. Cancelled, failed, or timed-out travel preserves the offering; Overworld returns require none.
 
-Craft these **shapeless recipes** at a crafting table (one item per occupied slot; each recipe yields one offering). They are automatically added to the recipe book; `/nether recipe` and `/end recipe` also list ingredients.
+Craft these **shapeless recipes** at a crafting table (one item per occupied slot; each recipe yields one offering). They are automatically added to the recipe book; browse `/civ items` → **Other Items** and click **Nether Ember** or **End Sigil** to view the ingredients.
 
 | Offering | Ingredients | Gameplay encouraged |
 | --- | --- | --- |
@@ -483,7 +483,7 @@ The `/wild` cooldown and pending first-join placement are saved in player data a
 
 ### Five families, three tiers
 
-Open `/civ items` to browse the custom items and click an item to see its recipe. Civic names use the same colors on physical items and in menus: **Tier 1 green, Tier 2 cyan, Tier 3 purple**.
+Open `/civ items` to browse the custom items and click an item to see its recipe. The **Other Items** section contains Nether Ember, End Sigil, War Charter, and information on obtaining the tutorial book. Civic names use the same colors on physical items and in menus: **Tier 1 green, Tier 2 cyan, Tier 3 purple**.
 
 | Family / persistent key | Tier 1 — green | Tier 2 — cyan | Tier 3 — purple |
 | --- | --- | --- | --- |
@@ -741,7 +741,7 @@ Membership is locked for participants when the campaign is declared. The combat 
 
 ### Crafting a War Charter
 
-Use this shaped crafting recipe. A renamed vanilla book is not a substitute for a crafted War Charter.
+View this shaped crafting recipe in `/civ items` → **Other Items** → **War Charter**. A renamed vanilla book is not a substitute for a crafted War Charter.
 
 **War Charter:** `P` = paper, `I` = iron ingot, `B` = writable book (book and quill).
 
@@ -833,7 +833,7 @@ Civilization gameplay is under `/civ`; standalone commands are `/wild`, `/nether
 | `/civ refine` | Open the civic-material refining/decompression interface. |
 | `/civ deposit <hand \| all>` | Permanently deposit authenticated civic materials into the shared stockpile. |
 | `/civ stockpile [history [page]]` | Open the stockpile GUI with all civic items, stack counts, and detailed hover totals; `history` shows the ledger. |
-| `/civ items` | Open the tiered custom-item browser; click an item to view its recipe. |
+| `/civ items` | Browse civic tiers and Other Items; click an item to view its recipe. |
 | `/civ workorders` or `/civ orders` | Compare each persistent order with the shared stockpile; leaders/advisors may click a ready order to spend its resources and earn Knowledge. |
 | `/religion [god]` | Open the Greek pantheon or choose a god directly; the GUI lists favor levels, roll ranges, next upgrades, offerings, blessings, and cooldowns. |
 | `/sacrifice [god]` | Offer the entire held stack to the selected god. A correct stack must exceed a favor-based roll (initially 1–30, down to 1–20 at level 3). Success raises favor; rejection consumes it and calls down lightning. |

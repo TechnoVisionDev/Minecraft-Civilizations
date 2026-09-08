@@ -20,7 +20,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
-import java.util.stream.Collectors;
 
 /** Persistent, craftable offerings for dimension travel. */
 public final class DimensionRitualItems implements Listener {
@@ -44,13 +43,6 @@ public final class DimensionRitualItems implements Listener {
         public String displayName() { return displayName; }
         public List<Material> ingredients() { return ingredients; }
         public String command() { return name().toLowerCase(Locale.ROOT); }
-        public String recipeDescription() {
-            return displayName + ": combine in any arrangement at a crafting table: "
-                + ingredients.stream().collect(Collectors.groupingBy(material -> material,
-                    java.util.LinkedHashMap::new, Collectors.counting())).entrySet().stream()
-                    .map(entry -> entry.getValue() + " " + entry.getKey().name().toLowerCase(Locale.ROOT).replace('_', ' '))
-                    .collect(Collectors.joining(", ")) + ". Makes 1; consumed on successful /" + command() + " travel.";
-        }
     }
 
     private final JavaPlugin plugin;
@@ -68,7 +60,7 @@ public final class DimensionRitualItems implements Listener {
         meta.setLore(List.of(Messages.color("&7Offering for /" + ritual.command() + "."),
             Messages.color("&7Requires expedition technology."),
             Messages.color("&7One consumed per successful trip."),
-            Messages.color("&8Recipe: /" + ritual.command() + " recipe")));
+            Messages.color("&8Recipe: /civ items > Other Items")));
         meta.getPersistentDataContainer().set(marker, PersistentDataType.STRING, ritual.command());
         item.setItemMeta(meta);
         return item;

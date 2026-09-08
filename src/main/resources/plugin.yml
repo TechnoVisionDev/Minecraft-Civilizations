@@ -8,11 +8,11 @@ softdepend: [Vault, PlaceholderAPI, CoreProtect, WorldGuard]
 commands:
   nether:
     description: Travel below the Nether roof with Nether Expedition and a Nether Ember
-    usage: /nether [recipe]
+    usage: /nether
     permission: civilizations.use
   end:
     description: Travel to a safe End island with End Expedition and an End Sigil
-    usage: /end [recipe]
+    usage: /end
     permission: civilizations.use
   wild:
     description: Teleport to safe Overworld wilderness inside the world border (12-hour cooldown)

@@ -13,8 +13,19 @@ import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.List;
+import java.util.Map;
 
 public final class WarItems {
+    private static final List<String> CHARTER_SHAPE = List.of("PIP", "IBI", "PIP");
+    private static final Map<Character, Material> CHARTER_INGREDIENTS = Map.of(
+        'P', Material.PAPER, 'I', Material.IRON_INGOT, 'B', Material.WRITABLE_BOOK);
+
+    /** Crafting-table order, shared with the item browser. */
+    public static List<Material> charterIngredients() {
+        return CHARTER_SHAPE.stream().flatMap(row -> row.chars().mapToObj(symbol ->
+            CHARTER_INGREDIENTS.get((char) symbol))).toList();
+    }
+
     private final JavaPlugin plugin;
     private final NamespacedKey itemTypeKey;
 
@@ -52,10 +63,8 @@ public final class WarItems {
         NamespacedKey charterKey = new NamespacedKey(plugin, "war_charter");
         plugin.getServer().removeRecipe(charterKey);
         ShapedRecipe charterRecipe = new ShapedRecipe(charterKey, charter());
-        charterRecipe.shape("PIP", "IBI", "PIP");
-        charterRecipe.setIngredient('P', Material.PAPER);
-        charterRecipe.setIngredient('I', Material.IRON_INGOT);
-        charterRecipe.setIngredient('B', Material.WRITABLE_BOOK);
+        charterRecipe.shape(CHARTER_SHAPE.toArray(String[]::new));
+        CHARTER_INGREDIENTS.forEach(charterRecipe::setIngredient);
         plugin.getServer().addRecipe(charterRecipe);
 
         NamespacedKey standardKey = new NamespacedKey(plugin, "war_standard");
